@@ -1,0 +1,32 @@
+body {
+  background: linear-gradient(180deg, #0a1628 0%, #1a2a4a 40%, #2a3a5a 70%, #3a4a6a 100%);
+  color: #fff;
+  min-height: 100vh;
+  font-family: 'Play', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+@font-face {
+  font-family: 'Play';
+  src: url('./assets/fonts/Play-Regular.woff') format('woff');
+  src: url('./assets/fonts/Play-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Play';
+  src: url('./assets/fonts/Play-Bold.woff') format('woff');
+  src: url('./assets/fonts/Play-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

@@ -1,0 +1,26 @@
+.header__search {
+    width: 655px;
+    height: 48px;
+    border-radius: .5rem;
+    background-color: #393B3C;
+    font-size: 18px;
+    font-weight: normal;
+    color: #fff;
+    padding: 0 16px;
+    border: none;
+    background-image: url('../../assets/search.svg');
+    background-repeat: no-repeat;
+    background-size: 24px;
+    background-position: 10px center;
+    padding-left: 45px;
+
+    &::placeholder {
+        color: #9c9d9e;
+
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+}
