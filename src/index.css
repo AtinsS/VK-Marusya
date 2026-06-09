@@ -7,11 +7,6 @@ body {
   padding: 0;
 }
 
-html,
-body,
-#root {
-  height: 100%;
-}
 
 @font-face {
   font-family: 'Play';
