@@ -92,19 +92,10 @@
     background: #2980b9;
 }
 
-.random-banner__button--info {
-    background: #3a3a3a;
-    color: white;
-    text-decoration: none;
-}
-
-.random-banner__button--info:hover {
-    background: #4a4a4a;
-}
 
 
-.random-banner__button--favorite,
-.random-banner__button--update {
+
+.random-banner__button--favorite {
     padding: 16px 22px;
     background: #3a3a3a;
     display: flex;
@@ -112,8 +103,7 @@
     justify-content: center;
 }
 
-.random-banner__button--favorite:hover,
-.random-banner__button--update:hover {
+.random-banner__button--favorite:hover {
     background: #4a4a4a;
 }
 

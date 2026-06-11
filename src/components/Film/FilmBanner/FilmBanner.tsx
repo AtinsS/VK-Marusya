@@ -1,17 +1,14 @@
-import { Link } from "react-router-dom";
-import heartIcon from "../../../assets/banner/heart.svg";
-import updateIcon from "../../../assets/banner/update.svg";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import {
-  fetchRandomMovie,
-  selectIsRandomMovieLoading,
-  selectRandomMovie,
-  selectRandomMovieError,
-} from "../../../store/slices/homeSlice";
-import { Loader } from "../../Loader";
-import "./Banner.css";
-import { TrailerModal } from "../../TrailerModal";
 import { useState } from "react";
+import heartIcon from "../../../assets/banner/heart.svg";
+import { useAppSelector } from "../../../store/hooks";
+import {
+  selectFilmById,
+  selectFilmByIdError,
+  selectIsFilmByIdLoading,
+} from "../../../store/slices/filmIdSlice";
+import { Loader } from "../../Loader";
+import "./FilmBanner.css";
+import { TrailerModal } from "../../TrailerModal";
 
 const formatRuntime = (runtime: number) => {
   const hours = Math.floor(runtime / 60);
@@ -28,16 +25,14 @@ const formatRuntime = (runtime: number) => {
   return `${hours} ч ${minutes} мин`;
 };
 
-export const Banner = () => {
-  const dispatch = useAppDispatch();
-  const movie = useAppSelector(selectRandomMovie);
-  const isLoading = useAppSelector(selectIsRandomMovieLoading);
-  const error = useAppSelector(selectRandomMovieError);
+export const FilmBanner = () => {
+  const movie = useAppSelector(selectFilmById);
+  const isLoading = useAppSelector(selectIsFilmByIdLoading);
+  const error = useAppSelector(selectFilmByIdError);
 
   const imageSrc = movie?.backdropUrl || movie?.posterUrl;
-  const title = movie?.title ?? <Loader />;
-  const description =
-    movie?.plot ?? error ?? "Подбираем случайный фильм для главного баннера";
+  const title = movie?.title ?? (isLoading ? <Loader /> : "Фильм не найден");
+  const description = movie?.plot ?? error ?? "Загружаем информацию о фильме";
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,8 +61,10 @@ export const Banner = () => {
         <p className="random-banner__description">{description}</p>
         <div className="random-banner__actions">
           <button
-            onClick={() => setIsOpen(true)}
             className="random-banner__button random-banner__button--trailer"
+            onClick={() => {
+              setIsOpen(true);
+            }}
           >
             Трейлер
           </button>
@@ -81,37 +78,22 @@ export const Banner = () => {
               }}
             />
           )}
-
-          <Link
-            to={`/movie/${movie?.id}`}
-            className="random-banner__button random-banner__button--info"
-          >
-            О фильме
-          </Link>
           <button
             className="random-banner__button random-banner__button--favorite"
             aria-label="В избранное"
           >
             <img src={heartIcon} alt="" />
           </button>
-          <button
-            className="random-banner__button random-banner__button--update"
-            aria-label="Обновить"
-            disabled={isLoading}
-            onClick={() => {
-              void dispatch(fetchRandomMovie());
-            }}
-          >
-            <img src={updateIcon} alt="" />
-          </button>
         </div>
       </div>
       <div className="random-banner__right">
-        <img
-          className="random-banner__image"
-          src={imageSrc}
-          alt={movie?.title ?? ""}
-        />
+        {imageSrc ? (
+          <img
+            className="random-banner__image"
+            src={imageSrc}
+            alt={movie?.title ?? ""}
+          />
+        ) : null}
       </div>
     </div>
   );

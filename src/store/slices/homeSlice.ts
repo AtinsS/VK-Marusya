@@ -11,7 +11,7 @@ interface HomeState {
   randomMovieStatus: RequestStatus;
   topMoviesStatus: RequestStatus;
   randomMovieError: string | null;
-  topMoviesError: string | null;
+  topMoviesError: string | null;  
 }
 
 export const initialState: HomeState = {

@@ -19,7 +19,6 @@ export const HomePage = () => {
     if (randomMovieStatus === "idle") {
       void dispatch(fetchRandomMovie());
     }
-
     if (topMoviesStatus === "idle") {
       void dispatch(fetchTopMovies());
     }

@@ -1,0 +1,64 @@
+.film-info {
+    max-width: 800px;
+    padding: 40px 20px;
+    align-items: left;
+    justify-content: flex-start;
+    color: #ffffff;
+}
+
+.film-info__title {
+    font-size: 48px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+}
+
+.film-info__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.film-info__status {
+    margin: 0;
+    font-size: 18px;
+    color: #a0a0a0;
+}
+
+.film-info__item {
+    display: flex;
+    align-items: baseline;
+    padding: 18px 0;
+
+    .film-info:last-child {
+        border-bottom: none;
+    }
+}
+
+.film-info__text {
+    font-size: 18px;
+    line-height: 1.4;
+    color: #ffffff;
+
+    .film-info:first-child {
+        flex-shrink: 0;
+        width: 180px;
+        font-weight: 400;
+    }
+
+    .film-info:last-child {
+        flex-shrink: 0;
+        text-align: right;
+        font-weight: 500;
+        padding-left: 10px;
+    }
+}
+
+.film-info__dots {
+    flex: 1;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.4);
+    margin: 0 12px;
+    position: relative;
+    top: 0px;
+    min-width: 50px;
+}

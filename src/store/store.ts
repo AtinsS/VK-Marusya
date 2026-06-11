@@ -1,8 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import filmIdReducer from "./slices/filmIdSlice";
 import homeReducer from "./slices/homeSlice";
 
 export const store = configureStore({
   reducer: {
+    filmId: filmIdReducer,
     home: homeReducer,
   },
 });
