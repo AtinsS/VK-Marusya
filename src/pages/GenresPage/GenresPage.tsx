@@ -5,6 +5,7 @@ import {
   fetchGenres,
   selectGenres,
   selectGenreStatus,
+  selectGenreError,
 } from "../../store/slices/genreSlice";
 import "./GenresPage.css";
 import { LoaderGenre } from "../../components/Loaders/LoaderGenre";
@@ -13,6 +14,7 @@ export const GenresPage = () => {
   const dispatch = useAppDispatch();
   const genres = useAppSelector(selectGenres);
   const status = useAppSelector(selectGenreStatus);
+  const error = useAppSelector(selectGenreError);
 
   useEffect(() => {
     if (status === "idle") {
@@ -26,6 +28,10 @@ export const GenresPage = () => {
         <LoaderGenre />
       </div>
     );
+  }
+
+  if (error) {
+    return <div className="error">Ошибка: {error}</div>;
   }
 
   return (

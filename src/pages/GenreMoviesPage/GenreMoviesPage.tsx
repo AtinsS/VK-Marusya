@@ -1,62 +1,82 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import {
-  fetchMoviesByGenre,
-  selectGenreMovies,
-  selectIsGenreMoviesLoading,
-  selectGenreMoviesError,
-} from "../../store/slices/genreMoviesSlice";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { LoaderMovie } from "../../components/Loaders/LoaderMovie";
+import { MoviesApi } from "../../api/movies.api";
+import type { Movie } from "../../entities/movies/types";
+import { GENRES } from "../../entities/movies/RuTranslate/genreTranslateRu";
 import "./GenreMoviesPage.css";
 
+interface Props {
+  genre?: string;
+}
 
-export const GenreMoviesPage = ({ genre }) => {
-  const dispatch = useAppDispatch();
-  const movies = useAppSelector(selectGenreMovies);
-  const isLoading = useAppSelector(selectIsGenreMoviesLoading);
-  const error = useAppSelector(selectGenreMoviesError);
+export const GenreMoviesPage = ({ genre }: Props) => {
+  const [grouped, setGrouped] = useState<Record<string, Movie[]>>({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const handleClick = (movieId: number) => {
-    navigate(`/movie/${movieId}`);
-  };
+  const params = useParams();
+  const selectedGenre = genre ?? params.genre;
+  const handleClick = (movieId: number) => navigate(`/movie/${movieId}`);
 
   useEffect(() => {
-    if (genre) {
-      dispatch(fetchMoviesByGenre(genre));
-    }
-  }, [dispatch, genre]);
+    let mounted = true;
+    const load = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const map = await MoviesApi.getAllGroupedByGenre();
+        if (!mounted) return;
+        setGrouped(map as Record<string, Movie[]>);
+      } catch {
+        setError("Не удалось загрузить фильмы по жанрам");
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
 
-  if (isLoading) {
-    return <LoaderMovie />;
-  }
+    load();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  if (error) {
-    return <div className="error">Ошибка: {error}</div>;
-  }
+  if (isLoading) return <LoaderMovie />;
+  if (error) return <div className="error">Ошибка: {error}</div>;
+
+  const genreKeys = Object.keys(grouped).sort();
+  const keysToShow = selectedGenre ? [selectedGenre] : genreKeys;
 
   return (
     <div className="genre-page">
-      <h1 className="genre-page__title">{genre}</h1>
-      {movies.length > 0 ? (
-        <ul className="genre-page__list">
-          {movies.map((movie) => (
-            <li
-              key={movie.id}
-              className="genre-page__item"
-              onClick={() => handleClick(movie.id)}
-            >
-              <img
-                src={movie.posterUrl}
-                alt={movie.title}
-                className="genre-page__img"
-              />
-            </li>
-          ))}
-        </ul>
+      {/* TODO Кнопка назад добавить
+      Стилизовать
+      Битые СВГ */}
+      <Link to="/genres"><img src="src/assets/back.svg" alt="arrow" /></Link> 
+      <h1 className="genre-page__title">{GENRES[selectedGenre]}</h1> 
+      {keysToShow.length === 0 ? (
+        <p className="genre-page__status">Фильмы не найдены</p>
       ) : (
-        <p>Фильмы не найдены</p>
+        keysToShow.map((g) => (
+          <section key={g}>
+            <ul className="genre-page__list">
+              {(grouped[g] || []).map((movie) => (
+                <li
+                  key={movie.id}
+                  className="genre-page__item"
+                  onClick={() => handleClick(movie.id)}
+                >
+                  <img
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    className="genre-page__img"
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
       )}
     </div>
   );

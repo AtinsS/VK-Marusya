@@ -31,10 +31,17 @@ export const fetchMoviesByGenre = createAsyncThunk<
 >("genreMovies/fetchByGenre", async (genre, { rejectWithValue }) => {
   try {
     const { data } = await MoviesApi.getByGenre(genre);
-    return data;
+    if (data && data.length > 0) {
+      return data;
+    }
+
+    // Fallback: если сервер вернул пустой массив, загрузить все фильмы и отфильтровать по жанру на клиенте
+    const { data: all } = await MoviesApi.getAll();
+    const filtered = all.filter((m) => Array.isArray(m.genres) && m.genres.includes(genre));
+    return filtered;
   } catch (error) {
     return rejectWithValue(
-      getErrorMessage(error, "Не удалось загрузить фильмы по жанру"),
+      getErrorMessage(error, "Не удалось загрузить фильмы"),
     );
   }
 });
