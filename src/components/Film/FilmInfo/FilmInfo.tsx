@@ -37,7 +37,7 @@ export const FilmInfo = () => {
             <li className="film-info__item" key={label}>
               <span className="film-info__text">{label}</span>
               <span className="film-info__dots"></span>
-              <span className="film-info__text">{value || "Нет данных"}</span>
+              <span className="film-info__text">{value}</span>
             </li>
           ))}
         </ul>

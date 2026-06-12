@@ -1,7 +1,12 @@
+import { GenreList } from "../../components/GenreList";
+import "./GenrePage.css";
+
 export const GenrePage = () => {
   return (
-    <div>
-      <h1>Genre Page</h1>
+    <div className="genre-page">
+      <section className="genre-page__section">
+        <GenreList />
+      </section>
     </div>
   );
 };
