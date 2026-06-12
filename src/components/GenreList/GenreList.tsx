@@ -2,6 +2,7 @@ import "./GenreList.css";
 
 export const GenreList = () => {
   return (
+
     <div className="genre-page">
       <h1 className="genre-page__title">Жанры фильмов</h1>
       <ul className="genre-page__list">
