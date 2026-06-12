@@ -2,8 +2,9 @@ import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
 import { Search } from "./components/Search";
 import { FilmPage } from "./pages/FilmPage/FilmPage";
 import { HomePage } from "./pages/HomePage/HomePage";
-import { GenrePage } from "./pages/GenrePage/GenrePage";
 import "./App.css";
+import { GenresPage } from "./pages/GenresPage";
+import { GenreMoviesPage } from "./pages/GenreMoviesPage/GenreMoviesPage";
 
 export default function App() {
   return (
@@ -34,8 +35,9 @@ export default function App() {
         <main className="main">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/genres" element={<GenrePage />}></Route>
+            <Route path="/genres" element={<GenresPage />}></Route>
             <Route path="/movie/:id" element={<FilmPage />} />
+            <Route path="/genres/:genre" element={<GenreMoviesPage />} />
           </Routes>
         </main>
 

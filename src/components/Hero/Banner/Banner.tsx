@@ -8,10 +8,11 @@ import {
   selectRandomMovie,
   selectRandomMovieError,
 } from "../../../store/slices/homeSlice";
-import { Loader } from "../../Loader";
 import "./Banner.css";
 import { TrailerModal } from "../../TrailerModal";
 import { useState } from "react";
+import { LoaderMovie } from "../../Loaders/LoaderMovie";
+import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
 
 const formatRuntime = (runtime: number) => {
   const hours = Math.floor(runtime / 60);
@@ -35,11 +36,13 @@ export const Banner = () => {
   const error = useAppSelector(selectRandomMovieError);
 
   const imageSrc = movie?.backdropUrl || movie?.posterUrl;
-  const title = movie?.title ?? <Loader />;
+  const title = movie?.title ?? <LoaderMovie />;
   const description =
     movie?.plot ?? error ?? "Подбираем случайный фильм для главного баннера";
 
   const [isOpen, setIsOpen] = useState(false);
+
+  const genres = movie?.genres.map((genre) => GENRES[genre]).join(", ");
 
   return (
     <div className="random-banner">
@@ -50,9 +53,7 @@ export const Banner = () => {
               {movie.tmdbRating.toFixed(1)}
             </span>
             <span className="random-banner__year">{movie.releaseYear}</span>
-            <span className="random-banner__genre">
-              {movie.genres.slice(0, 2).join(", ")}
-            </span>
+            <span className="random-banner__genre">{genres}</span>
             <span className="random-banner__duration">
               {formatRuntime(movie.runtime)}
             </span>

@@ -1,4 +1,4 @@
-.loader {
+.loader-movie {
     font-size: 48px;
     color: #FFF;
     display: inline-block;
@@ -7,13 +7,13 @@
     position: relative;
 }
 
-.loader:after {
+.loader-movie:after {
     content: 'Загружаем кино...';
     position: relative;
     z-index: 5;
 }
 
-.loader:before {
+.loader-movie:before {
     content: '';
     height: 6px;
     border: 1px solid;

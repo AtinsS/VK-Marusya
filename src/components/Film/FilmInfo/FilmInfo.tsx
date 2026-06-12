@@ -1,10 +1,12 @@
+import { LANGUAGES } from "../../../entities/movies/RuTranslate/languageTranslateRu";
 import { useAppSelector } from "../../../store/hooks";
 import {
   selectFilmById,
   selectFilmByIdError,
   selectIsFilmByIdLoading,
 } from "../../../store/slices/filmIdSlice";
-import { Loader } from "../../Loader";
+import { LoaderAll } from "../../Loaders/LoaderAll";
+
 import "./FilmInfo.css";
 
 export const FilmInfo = () => {
@@ -14,7 +16,7 @@ export const FilmInfo = () => {
 
   const rows = movie
     ? [
-        ["Язык оригинала", movie.language],
+        ["Язык оригинала", movie.language && LANGUAGES[movie.language]],
         ["Бюджет", movie.budget],
         ["Выручка", movie.revenue],
         ["Режиссёр", movie.director],
@@ -26,7 +28,7 @@ export const FilmInfo = () => {
   return (
     <div className="film-info">
       <h1 className="film-info__title">О фильме</h1>
-      {isLoading ? <Loader /> : null}
+      {isLoading ? <LoaderAll /> : null}
       {error ? <p className="film-info__status">{error}</p> : null}
       {!isLoading && !error && !movie ? (
         <p className="film-info__status">Информация о фильме не найдена</p>
@@ -37,7 +39,7 @@ export const FilmInfo = () => {
             <li className="film-info__item" key={label}>
               <span className="film-info__text">{label}</span>
               <span className="film-info__dots"></span>
-              <span className="film-info__text">{value  }</span>
+              <span className="film-info__text">{value || "Не указано"}</span>
             </li>
           ))}
         </ul>
