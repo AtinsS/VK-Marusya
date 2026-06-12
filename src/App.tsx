@@ -5,6 +5,11 @@ import { HomePage } from "./pages/HomePage/HomePage";
 import "./App.css";
 import { GenresPage } from "./pages/GenresPage";
 import { GenreMoviesPage } from "./pages/GenreMoviesPage/GenreMoviesPage";
+import Logo from "./assets/Logo.svg";
+import vk from "./assets/vk.svg";
+import telegram from "./assets/telegram.svg";
+import youtube from "./assets/rutube.svg";
+import ok from "./assets/ok.svg";
 
 export default function App() {
   return (
@@ -15,7 +20,7 @@ export default function App() {
             <Link className="header__logo" to={"/"}>
               <img
                 className="header__logo-img"
-                src="src/assets/Logo.svg"
+                src={Logo}
                 alt="Логотип Маруси"
               />
             </Link>
@@ -49,7 +54,7 @@ export default function App() {
               target="_blank"
             >
               {" "}
-              <img src="src/assets/vk.svg" alt="vk" />
+              <img src={vk} alt="vk" />
             </a>
             <a
               className="footer__social-item"
@@ -57,7 +62,7 @@ export default function App() {
               target="_blank"
             >
               {" "}
-              <img src="src/assets/rutube.svg" alt="rutube" />
+              <img src={youtube} alt="rutube" />
             </a>
             <a
               className="footer__social-item"
@@ -65,7 +70,7 @@ export default function App() {
               target="_blank"
             >
               {" "}
-              <img src="src/assets/ok.svg" alt="ok" />
+              <img src={ok} alt="ok" />
             </a>
             <a
               className="footer__social-item"
@@ -73,7 +78,7 @@ export default function App() {
               target="_blank"
             >
               {" "}
-              <img src="src/assets/telegram.svg" alt="telegram" />
+              <img src={telegram} alt="telegram" />
             </a>
           </div>
         </footer>

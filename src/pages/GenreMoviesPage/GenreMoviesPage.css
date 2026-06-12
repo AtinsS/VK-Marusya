@@ -60,3 +60,23 @@
     display: block;
     border-radius: 12px;
 }
+
+.genre-page__head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.genre-page__back {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease-in-out, scale 0.3s ease-in-out;
+
+}
+
+.genre-page__back:hover {
+    transform: translateX(-10px) scale(1.1);
+}

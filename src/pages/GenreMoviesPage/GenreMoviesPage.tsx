@@ -5,6 +5,7 @@ import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import { GENRES } from "../../entities/movies/RuTranslate/genreTranslateRu";
 import "./GenreMoviesPage.css";
+import backIcon from "../../assets/back.svg";
 
 interface Props {
   genre?: string;
@@ -50,11 +51,13 @@ export const GenreMoviesPage = ({ genre }: Props) => {
 
   return (
     <div className="genre-page">
-      {/* TODO Кнопка назад добавить
-      Стилизовать
-      Битые СВГ */}
-      <Link to="/genres"><img src="src/assets/back.svg" alt="arrow" /></Link> 
-      <h1 className="genre-page__title">{GENRES[selectedGenre]}</h1> 
+      <div className="genre-page__head">
+        {" "}
+        <Link to="/genres">
+          <img className="genre-page__back" src={backIcon} alt="arrow" />
+        </Link>
+        <h1 className="genre-page__title">{GENRES[selectedGenre]}</h1>{" "}
+      </div>
       {keysToShow.length === 0 ? (
         <p className="genre-page__status">Фильмы не найдены</p>
       ) : (
