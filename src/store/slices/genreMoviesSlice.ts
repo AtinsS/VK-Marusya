@@ -6,13 +6,13 @@ import type { RootState } from "../store";
 type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
 
 export interface GenreMoviesState {
-  movies: Movie[];
+  movies: Record<string, Movie[]>;
   status: RequestStatus;
   error: string | null;
 }
 
 export const initialState: GenreMoviesState = {
-  movies: [],
+  movies: {},
   status: "idle",
   error: null,
 };
@@ -24,24 +24,17 @@ const getErrorMessage = (error: unknown, fallback: string) => {
   return fallback;
 };
 
-export const fetchMoviesByGenre = createAsyncThunk<
-  Movie[],
-  string,
+export const fetchMoviesGrouped = createAsyncThunk<
+  Record<string, Movie[]>,
+  void,
   { rejectValue: string }
->("genreMovies/fetchByGenre", async (genre, { rejectWithValue }) => {
+>("genreMovies/fetchGrouped", async (_, { rejectWithValue }) => {
   try {
-    const { data } = await MoviesApi.getByGenre(genre);
-    if (data && data.length > 0) {
-      return data;
-    }
-
-    // Fallback: если сервер вернул пустой массив, загрузить все фильмы и отфильтровать по жанру на клиенте
-    const { data: all } = await MoviesApi.getAll();
-    const filtered = all.filter((m) => Array.isArray(m.genres) && m.genres.includes(genre));
-    return filtered;
+    const grouped = await MoviesApi.getGroupedByGenre();
+    return grouped;
   } catch (error) {
     return rejectWithValue(
-      getErrorMessage(error, "Не удалось загрузить фильмы"),
+      getErrorMessage(error, "Не удалось загрузить сгруппированные фильмы"),
     );
   }
 });
@@ -52,24 +45,28 @@ const genreMoviesSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchMoviesByGenre.pending, (state) => {
+      .addCase(fetchMoviesGrouped.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(fetchMoviesByGenre.fulfilled, (state, action) => {
+      .addCase(fetchMoviesGrouped.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.movies = action.payload;
       })
-      .addCase(fetchMoviesByGenre.rejected, (state, action) => {
+      .addCase(fetchMoviesGrouped.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload ?? "Не удалось загрузить фильмы по жанру";
+        state.error =
+          action.payload ?? "Не удалось загрузить сгруппированные фильмы";
       });
   },
 });
 
-export const selectGenreMovies = (state: RootState) => state.genreMovies.movies;
-export const selectGenreMoviesStatus = (state: RootState) => state.genreMovies.status;
-export const selectGenreMoviesError = (state: RootState) => state.genreMovies.error;
+export const selectGenreMovies = (state: RootState) =>
+  state.genreMovies.movies as Record<string, Movie[]>;
+export const selectGenreMoviesStatus = (state: RootState) =>
+  state.genreMovies.status;
+export const selectGenreMoviesError = (state: RootState) =>
+  state.genreMovies.error;
 export const selectIsGenreMoviesLoading = (state: RootState) =>
   state.genreMovies.status === "loading";
 

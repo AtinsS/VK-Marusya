@@ -33,8 +33,8 @@ export const fetchMovieById = createAsyncThunk<
   { rejectValue: string }
 >("filmId/fetchMovieById", async (id, { rejectWithValue }) => {
   try {
-    const { data } = await MoviesApi.getById(id);
-    return data;
+  const data = await MoviesApi.getById(id);
+  return data;
   } catch (error) {
     return rejectWithValue(
       getErrorMessage(error, "Не удалось загрузить информацию о фильме"),

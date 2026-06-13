@@ -29,4 +29,5 @@ export const GENRES = {
   game_show: "Игровое шоу",
   "stand-up": "Стендап",
   music: "Музыкальный",
+  "tv-movie": "ТВ-фильм",
 };

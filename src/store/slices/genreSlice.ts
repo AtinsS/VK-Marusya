@@ -30,8 +30,8 @@ export const fetchGenres = createAsyncThunk<
   { rejectValue: string }
 >("genre/fetchGenres", async (_, { rejectWithValue }) => {
   try {
-    const { data } = await MoviesApi.getGenres();
-    return data;
+  const data = await MoviesApi.getGenres();
+  return data;
   } catch (error) {
     return rejectWithValue(
       getErrorMessage(error, "Не удалось загрузить список жанров"),

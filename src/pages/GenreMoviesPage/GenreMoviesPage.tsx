@@ -21,27 +21,30 @@ export const GenreMoviesPage = ({ genre }: Props) => {
   const selectedGenre = genre ?? params.genre;
   const handleClick = (movieId: number) => navigate(`/movie/${movieId}`);
 
+  function getErrorMessage(error: unknown, fallback: string) {
+    if (error instanceof Error) return error.message;
+    return fallback;
+  }
+
   useEffect(() => {
-    let mounted = true;
-    const load = async () => {
+    const fetchMovies = async () => {
       setIsLoading(true);
-      setError(null);
       try {
-        const map = await MoviesApi.getAllGroupedByGenre();
-        if (!mounted) return;
-        setGrouped(map as Record<string, Movie[]>);
-      } catch {
-        setError("Не удалось загрузить фильмы по жанрам");
+        if (selectedGenre) {
+          const movies = await MoviesApi.getByGenre(selectedGenre);
+          setGrouped({ [selectedGenre]: movies });
+        } else {
+          const groupedMovies = await MoviesApi.getGroupedByGenre();
+          setGrouped(groupedMovies);
+        }
+      } catch (error) {
+        console.error(getErrorMessage(error, "Не удалось загрузить фильмы"));
       } finally {
-        if (mounted) setIsLoading(false);
+        setIsLoading(false);
       }
     };
-
-    load();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+    fetchMovies();
+  }, [selectedGenre]);
 
   if (isLoading) return <LoaderMovie />;
   if (error) return <div className="error">Ошибка: {error}</div>;

@@ -5,7 +5,11 @@ info:
 
 http:
   method: GET
-  url: https://cinemaguide.skillbox.cc/movie/genres
+  url: https://cinemaguide.skillbox.cc/movie?genre=action
+  params:
+    - name: genre
+      value: action
+      type: query
   auth: inherit
 
 settings:

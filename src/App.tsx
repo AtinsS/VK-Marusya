@@ -66,7 +66,7 @@ export default function App() {
             </a>
             <a
               className="footer__social-item"
-              href="https://ok.com"
+              href="https://ok.ru"
               target="_blank"
             >
               {" "}

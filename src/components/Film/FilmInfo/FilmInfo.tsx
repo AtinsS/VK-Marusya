@@ -17,8 +17,8 @@ export const FilmInfo = () => {
   const rows = movie
     ? [
         ["Язык оригинала", movie.language && LANGUAGES[movie.language]],
-        ["Бюджет", movie.budget],
-        ["Выручка", movie.revenue],
+        ["Бюджет", movie.budget != null ? `${movie.budget} $` : undefined],
+        ["Выручка", movie.revenue != null ? `${movie.revenue} $` : undefined],
         ["Режиссёр", movie.director],
         ["Продакшен", movie.production],
         ["Награды", movie.awardsSummary],

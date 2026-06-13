@@ -37,8 +37,8 @@ export const fetchRandomMovie = createAsyncThunk<
   { rejectValue: string }
 >("home/fetchRandomMovie", async (_, { rejectWithValue }) => {
   try {
-    const { data } = await MoviesApi.getRandom();
-    return data;
+  const data = await MoviesApi.getRandom();
+  return data;
   } catch (error) {
     return rejectWithValue(
       getErrorMessage(error, "Не удалось загрузить случайный фильм"),
@@ -52,8 +52,8 @@ export const fetchTopMovies = createAsyncThunk<
   { rejectValue: string }
 >("home/fetchTopMovies", async (_, { rejectWithValue }) => {
   try {
-    const { data } = await MoviesApi.getTop();
-    return data;
+  const data = await MoviesApi.getTop();
+  return data;
   } catch (error) {
     return rejectWithValue(
       getErrorMessage(error, "Не удалось загрузить топ фильмов"),
