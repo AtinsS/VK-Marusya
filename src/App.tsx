@@ -36,7 +36,6 @@ export default function App() {
             <button className="header__btn">Войти</button>
           </nav>
         </header>
-
         <main className="main">
           <Routes>
             <Route path="/" element={<HomePage />} />

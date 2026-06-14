@@ -7,24 +7,10 @@ import {
   selectIsFilmByIdLoading,
 } from "../../../store/slices/filmIdSlice";
 import "./FilmBanner.css";
-import { TrailerModal } from "../../TrailerModal";
+import { TrailerModal } from "../../Modals/TrailerModal";
 import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
 import { LoaderMovie } from "../../Loaders/LoaderMovie";
-
-const formatRuntime = (runtime: number) => {
-  const hours = Math.floor(runtime / 60);
-  const minutes = runtime % 60;
-
-  if (!hours) {
-    return `${minutes} мин`;
-  }
-
-  if (!minutes) {
-    return `${hours} ч`;
-  }
-
-  return `${hours} ч ${minutes} мин`;
-};
+import { formatRuntime } from "../../../utils/utils";
 
 export const FilmBanner = () => {
   const movie = useAppSelector(selectFilmById);

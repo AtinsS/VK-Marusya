@@ -30,5 +30,3 @@ export const MovieSchema = z.object({
 });
 
 export type Movie = z.infer<typeof MovieSchema>;
-
-

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { LoaderMovie } from "../../components/Loaders/LoaderMovie";
 import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
@@ -15,11 +15,12 @@ export const GenreMoviesPage = ({ genre }: Props) => {
   const [grouped, setGrouped] = useState<Record<string, Movie[]>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>(
+    {},
+  );
 
-  const navigate = useNavigate();
   const params = useParams();
   const selectedGenre = genre ?? params.genre;
-  const handleClick = (movieId: number) => navigate(`/movie/${movieId}`);
 
   function getErrorMessage(error: unknown, fallback: string) {
     if (error instanceof Error) return error.message;
@@ -33,18 +34,22 @@ export const GenreMoviesPage = ({ genre }: Props) => {
         if (selectedGenre) {
           const movies = await MoviesApi.getByGenre(selectedGenre);
           setGrouped({ [selectedGenre]: movies });
-        } else {
-          const groupedMovies = await MoviesApi.getGroupedByGenre();
-          setGrouped(groupedMovies);
         }
       } catch (error) {
-        console.error(getErrorMessage(error, "Не удалось загрузить фильмы"));
+        setError(getErrorMessage(error, "Не удалось загрузить фильмы"));
       } finally {
         setIsLoading(false);
       }
     };
     fetchMovies();
   }, [selectedGenre]);
+
+  const handleShowMore = (genreKey: string) => {
+    setVisibleCounts((prev) => ({
+      ...prev,
+      [genreKey]: (prev[genreKey] ?? 10) + 10,
+    }));
+  };
 
   if (isLoading) return <LoaderMovie />;
   if (error) return <div className="error">Ошибка: {error}</div>;
@@ -55,34 +60,48 @@ export const GenreMoviesPage = ({ genre }: Props) => {
   return (
     <div className="genre-page">
       <div className="genre-page__head">
-        {" "}
         <Link to="/genres">
           <img className="genre-page__back" src={backIcon} alt="arrow" />
         </Link>
-        <h1 className="genre-page__title">{GENRES[selectedGenre]}</h1>{" "}
+        <h1 className="genre-page__title">{GENRES[selectedGenre]}</h1>
       </div>
+
       {keysToShow.length === 0 ? (
         <p className="genre-page__status">Фильмы не найдены</p>
       ) : (
-        keysToShow.map((g) => (
-          <section key={g}>
-            <ul className="genre-page__list">
-              {(grouped[g] || []).map((movie) => (
-                <li
-                  key={movie.id}
-                  className="genre-page__item"
-                  onClick={() => handleClick(movie.id)}
+        keysToShow.map((g) => {
+          const movies = grouped[g] || [];
+          const limit = visibleCounts[g] ?? 10;
+          const moviesToShow = movies.slice(0, limit);
+          const hasMore = movies.length > limit;
+
+          return (
+            <section key={g}>
+              <ul className="genre-page__list">
+                {moviesToShow.map((movie) => (
+                  <Link key={movie.id} to={`/movie/${movie.id}`}>
+                    <li className="genre-page__item">
+                      <img
+                        src={movie.posterUrl}
+                        alt={movie.title}
+                        className="genre-page__img"
+                      />
+                    </li>
+                  </Link>
+                ))}
+              </ul>
+
+              {hasMore && (
+                <button
+                  className="genre-page__btn"
+                  onClick={() => handleShowMore(g)}
                 >
-                  <img
-                    src={movie.posterUrl}
-                    alt={movie.title}
-                    className="genre-page__img"
-                  />
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))
+                  Показать ещё
+                </button>
+              )}
+            </section>
+          );
+        })
       )}
     </div>
   );
