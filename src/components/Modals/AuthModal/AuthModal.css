@@ -1,0 +1,199 @@
+ .modal-auth {
+     position: fixed;
+     inset: 0;
+     background: rgba(20, 22, 26, 0.85);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     z-index: 1000;
+     animation: fadeIn 0.25s ease;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+     }
+
+     to {
+         opacity: 1;
+     }
+ }
+
+ .modal-auth__registration-title {
+     color: #000000;
+     font-size: 32px;
+     font-weight: 600;
+     margin: 0 0 30px 0;
+ }
+
+
+ .modal-auth__close {
+     position: absolute;
+     top: -25px;
+     right: -42px;
+     width: 44px;
+     height: 44px;
+     border-radius: 50%;
+     background: #fff;
+     border: none;
+     cursor: pointer;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+     transition: transform 0.15s ease;
+     background-image: url(../../../assets/close.svg);
+     background-size: 24px;
+     background-position: center;
+     background-repeat: no-repeat;
+ }
+
+
+ .modal-auth__close:hover {
+     transform: scale(1.08);
+ }
+
+
+
+ .modal-auth__wrapper {
+     background: #ffffff;
+     border-radius: 28px;
+     padding: 48px 44px 40px;
+     width: 100%;
+     max-width: 420px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+     animation: slideUp 0.3s ease;
+     position: relative;
+ }
+
+ @keyframes slideUp {
+     from {
+         opacity: 0;
+         transform: translateY(20px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ /* Логотип */
+ .modal-auth__img {
+     width: 140px;
+     height: auto;
+     margin-bottom: 40px;
+ }
+
+ /* Форма */
+ .modal-auth__form {
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     gap: 30px;
+ }
+
+ /* Поля ввода */
+ .modal-auth__input {
+     width: 80%;
+     height: 52px;
+     padding: 0 20px 0 52px;
+     border: 1.5px solid #d8dbe0;
+     border-radius: 12px;
+     font-size: 15px;
+     color: #2b2d31;
+     background: #fff;
+     outline: none;
+     transition: border-color 0.2s ease, box-shadow 0.2s ease;
+ }
+
+ .modal-auth__input::placeholder {
+     color: #9aa0a6;
+ }
+
+ .modal-auth__input:focus {
+     border-color: #6aa9f0;
+     box-shadow: 0 0 0 3px rgba(106, 169, 240, 0.15);
+ }
+
+ /* Иконки внутри инпутов */
+ .modal-auth__input--email {
+     background-image: url(../../../assets/email.svg);
+     background-repeat: no-repeat;
+     background-position: 16px center;
+ }
+
+ .modal-auth__input--password {
+     background-image: url(../../../assets/pass.svg);
+     background-repeat: no-repeat;
+     background-position: 16px center;
+ }
+
+ .modal-auth__input--name {
+     background-image: url(../../../assets/mister.svg);
+     background-repeat: no-repeat;
+     background-position: 16px center;
+ }
+
+ /* Кнопка "Войти" */
+ .modal-auth__button {
+     width: 100%;
+     height: 52px;
+     margin-top: 8px;
+     background: #6aa9f0;
+     color: #fff;
+     border: none;
+     border-radius: 26px;
+     font-size: 16px;
+     font-weight: 600;
+     letter-spacing: 0.3px;
+     cursor: pointer;
+     transition: background 0.2s ease, transform 0.1s ease;
+ }
+
+ .modal-auth__button:hover {
+     background: #5a9ae0;
+ }
+
+ .modal-auth__button:active {
+     transform: scale(0.98);
+ }
+
+ /* Ссылка "Регистрация" */
+ .modal-auth__link {
+     margin-top: 20px;
+     font-size: 16px;
+     font-weight: 600;
+     color: #2b2d31;
+     cursor: pointer;
+     transition: color 0.2s ease;
+ }
+
+ .modal-auth__link:hover {
+     color: #6aa9f0;
+ }
+
+ .modal-auth__success-title {
+     font-size: 24px;
+     font-weight: 600;
+     color: #000000;
+     margin-bottom: 10px;
+ }
+
+ .modal-auth__success-text {
+     font-size: 18px;
+     color: #000000;
+     text-align: center;
+ }
+
+ .modal-auth__success {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+ }

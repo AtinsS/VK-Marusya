@@ -37,14 +37,14 @@ export const Search = () => {
         try {
           const all = await MoviesApi.getAll();
           const q = debouncedInput.toLowerCase();
-          const filtered = all.filter(
-            (m) =>
-              m.title.toLowerCase().includes(q) ||
-              (m.originalTitle || "").toLowerCase().includes(q),
-          );
-          const sliced = filtered.slice(0, 5);
-          setMovies(sliced);
-          console.debug("Search results:", filtered.length); //!ПОТОМ УБРАТЬ
+          const filtered = all
+            .filter(
+              (m) =>
+                m.title.toLowerCase().includes(q) ||
+                (m.originalTitle || "").toLowerCase().includes(q),
+            )
+            .slice(0, 5);
+          setMovies(filtered);
         } catch (err) {
           console.error("Search error:", err);
           setMovies([]);
@@ -67,7 +67,7 @@ export const Search = () => {
           className: "search__input",
         })}
       />
-      {isLoading && <div className="search__loading">Загрузка...</div>}
+      {isLoading}
 
       <ul {...getMenuProps({ className: "search__results" })}>
         {isOpen &&

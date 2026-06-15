@@ -10,8 +10,12 @@ import vk from "./assets/vk.svg";
 import telegram from "./assets/telegram.svg";
 import youtube from "./assets/rutube.svg";
 import ok from "./assets/ok.svg";
+import { AuthModal } from "./components/Modals/AuthModal";
+import { useState } from "react";
 
 export default function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="app">
       <BrowserRouter>
@@ -33,8 +37,11 @@ export default function App() {
               </NavLink>
               <Search />
             </div>
-            <button className="header__btn">Войти</button>
+            <button className="header__btn" onClick={() => setIsOpen(true)}>
+              Войти
+            </button>
           </nav>
+          {isOpen && <AuthModal onClose={() => setIsOpen(false)} />}
         </header>
         <main className="main">
           <Routes>
