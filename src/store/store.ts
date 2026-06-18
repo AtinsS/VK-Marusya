@@ -3,6 +3,7 @@ import homeReducer from "./slices/homeSlice";
 import genreReducer from "./slices/genreSlice";
 import filmIdReducer from "./slices/filmIdSlice";
 import genreMoviesReducer from "./slices/genreMoviesSlice";
+import authReducer from "./slices/authSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     genre: genreReducer,
     filmId: filmIdReducer,
     genreMovies: genreMoviesReducer,
+    auth: authReducer,
   },
 });
 

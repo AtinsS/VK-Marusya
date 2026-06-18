@@ -11,10 +11,17 @@ import telegram from "./assets/telegram.svg";
 import youtube from "./assets/rutube.svg";
 import ok from "./assets/ok.svg";
 import { AuthModal } from "./components/Modals/AuthModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from "./hooks/useAuth";
+import { ProfilePage } from "./pages/ProfilePage";
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAuth, user, checkAuth } = useAuth();
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <div className="app">
@@ -37,9 +44,18 @@ export default function App() {
               </NavLink>
               <Search />
             </div>
-            <button className="header__btn" onClick={() => setIsOpen(true)}>
-              Войти
-            </button>
+
+            {isAuth ? (
+              <div>
+                <Link to="/profile" className="header__btn">
+                  {user?.name ?? "Ввести имя"}
+                </Link>
+              </div>
+            ) : (
+              <button className="header__btn" onClick={() => setIsOpen(true)}>
+                Войти
+              </button>
+            )}
           </nav>
           {isOpen && <AuthModal onClose={() => setIsOpen(false)} />}
         </header>
@@ -49,6 +65,7 @@ export default function App() {
             <Route path="/genres" element={<GenresPage />}></Route>
             <Route path="/movie/:id" element={<FilmPage />} />
             <Route path="/genres/:genre" element={<GenreMoviesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
 

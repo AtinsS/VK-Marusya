@@ -6,11 +6,11 @@ export const AuthApi = {
     api.post<SuccessfulResult>("/auth/login", { email, password }),
   logout: () => api.get<SuccessfulResult>("/auth/logout"),
   register: (email: string, password: string, name: string, surname: string) =>
-    api.post<SuccessfulResult>("/auth/register", {
+    api.post<SuccessfulResult>("/user", {
       email,
       password,
       name,
       surname,
     }),
-  getProfile: () => api.get<User>("/auth/profile"),
+  getProfile: () => api.get<User>("/profile"),
 };

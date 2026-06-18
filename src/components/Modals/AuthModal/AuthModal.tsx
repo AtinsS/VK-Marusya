@@ -1,22 +1,58 @@
 import { useState } from "react";
 import marusyaBlack from "../../../assets/marusyaBlack.svg";
 import "./AuthModal.css";
+import { useAuth } from "../../../hooks/useAuth";
+import { useLoginForm, useRegisterForm } from "../../../hooks/useAuthForm";
+import type { LoginForm, RegisterForm } from "../../../entities/auth/types";
 
-export const AuthModal = ({ onClose }) => {
-  const [authMode, setAuthMode] = useState("login");
+type AuthMode = "login" | "register" | "success";
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+export const AuthModal = ({ onClose }: { onClose: () => void }) => {
+  const [authMode, setAuthMode] = useState<AuthMode>("login");
+  const { login, register, isLoading, error, clearError } = useAuth();
 
-    if (authMode === "register") {
-      setAuthMode("success");
-    } else {
-      console.log("Login"); // !Потом убрать
+  const {
+    register: loginRegister,
+    handleSubmit: handleLoginSubmit,
+    formState: { errors: loginErrors },
+  } = useLoginForm();
+
+  const {
+    register: registerRegister,
+    handleSubmit: handleRegisterSubmit,
+    formState: { errors: registerErrors },
+  } = useRegisterForm();
+
+  const handleModeChange = (mode: AuthMode) => {
+    setAuthMode(mode);
+    clearError();
+  };
+
+  const onLogin = async (data: LoginForm) => {
+    try {
+      await login(data.email, data.password).unwrap();
+      onClose();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const onRegister = async (data: RegisterForm) => {
+    try {
+      await register(
+        data.email,
+        data.password,
+        data.name,
+        data.surname,
+      ).unwrap();
+      handleModeChange("success");
+    } catch (err) {
+      console.error(err);
     }
   };
 
   const handleLoginClick = () => {
-    setAuthMode("login");
+    handleModeChange("login");
   };
 
   return (
@@ -29,7 +65,7 @@ export const AuthModal = ({ onClose }) => {
           alt="Логотип Маруси"
         />
 
-        {/* Экран успеха */}
+        {/* Авторизация */}
         {authMode === "success" && (
           <div className="modal-auth__success">
             <h2 className="modal-auth__success-title">Регистрация завершена</h2>
@@ -45,75 +81,140 @@ export const AuthModal = ({ onClose }) => {
           </div>
         )}
 
-        {/* Формы входа и регистрации */}
+        {/* Успешная регистрация */}
         {authMode !== "success" && (
           <>
             {authMode !== "login" && (
               <h3 className="modal-auth__registration-title">Регистрация</h3>
             )}
 
-            <form className="modal-auth__form" onSubmit={handleSubmit}>
-              {authMode === "register" && (
-                <>
-                  <input
-                    type="email"
-                    className="modal-auth__input modal-auth__input--email"
-                    placeholder="sample@domain.ru"
-                    required
-                  />
-                  <input
-                    type="text"
-                    className="modal-auth__input modal-auth__input--name"
-                    placeholder="Имя"
-                    required
-                  />
-                  <input
-                    type="text"
-                    className="modal-auth__input modal-auth__input--name"
-                    placeholder="Фамилия"
-                    required
-                  />
-                  <input
-                    type="password"
-                    className="modal-auth__input modal-auth__input--password"
-                    placeholder="Пароль"
-                    required
-                  />
-                  <input
-                    type="password"
-                    className="modal-auth__input modal-auth__input--password"
-                    placeholder="Подтвердите пароль"
-                    required
-                  />
-                </>
-              )}
+            {/*  Ошибка основная */}
+            {error && (
+              <p className="modal-auth__error">
+                {`Ошибка: ${error}`}
+              </p>
+            )}
 
-              {authMode === "login" && (
-                <>
-                  <input
-                    type="email"
-                    className="modal-auth__input modal-auth__input--email"
-                    placeholder="Электронная почта"
-                    required
-                  />
-                  <input
-                    type="password"
-                    className="modal-auth__input modal-auth__input--password"
-                    placeholder="Пароль"
-                    required
-                  />
-                </>
-              )}
+            {/* Логин */}
+            {authMode === "login" && (
+              <form
+                className="modal-auth__form"
+                onSubmit={handleLoginSubmit(onLogin)}
+              >
+                <input
+                  {...loginRegister("email")}
+                  type="email"
+                  className="modal-auth__input modal-auth__input--email"
+                  placeholder="Электронная почта"
+                />
+                {loginErrors.email && (
+                  <p className="modal-auth__error">
+                    {loginErrors.email.message}
+                  </p>
+                )}
 
-              <button type="submit" className="modal-auth__button">
-                {authMode === "login" ? "Войти" : "Создать аккаунт"}
-              </button>
-            </form>
+                <input
+                  {...loginRegister("password")}
+                  type="password"
+                  className="modal-auth__input modal-auth__input--password"
+                  placeholder="Пароль"
+                />
+                {loginErrors.password && (
+                  <p className="modal-auth__error">
+                    {loginErrors.password.message}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="modal-auth__button"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Подождите..." : "Войти"}
+                </button>
+              </form>
+            )}
+
+            {/* Регистрация */}
+            {authMode === "register" && (
+              <form
+                className="modal-auth__form"
+                onSubmit={handleRegisterSubmit(onRegister)}
+              >
+                <input
+                  {...registerRegister("email")}
+                  type="email"
+                  className="modal-auth__input modal-auth__input--email"
+                  placeholder="sample@domain.ru"
+                />
+                {registerErrors.email && (
+                  <p className="modal-auth__error">
+                    {registerErrors.email.message}
+                  </p>
+                )}
+
+                <input
+                  {...registerRegister("name")}
+                  type="text"
+                  className="modal-auth__input modal-auth__input--name"
+                  placeholder="Имя"
+                />
+                {registerErrors.name && (
+                  <p className="modal-auth__error">
+                    {registerErrors.name.message}
+                  </p>
+                )}
+
+                <input
+                  {...registerRegister("surname")}
+                  type="text"
+                  className="modal-auth__input modal-auth__input--name"
+                  placeholder="Фамилия"
+                />
+                {registerErrors.surname && (
+                  <p className="modal-auth__error">
+                    {registerErrors.surname.message}
+                  </p>
+                )}
+
+                <input
+                  {...registerRegister("password")}
+                  type="password"
+                  className="modal-auth__input modal-auth__input--password"
+                  placeholder="Пароль"
+                />
+                {registerErrors.password && (
+                  <p className="modal-auth__error">
+                    {registerErrors.password.message}
+                  </p>
+                )}
+
+                <input
+                  {...registerRegister("confirmPassword")}
+                  type="password"
+                  className="modal-auth__input modal-auth__input--password"
+                  placeholder="Подтвердите пароль"
+                />
+                {registerErrors.confirmPassword && (
+                  <p className="modal-auth__error">
+                    {registerErrors.confirmPassword.message}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="modal-auth__button"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Подождите..." : "Создать аккаунт"}
+                </button>
+              </form>
+            )}
 
             <div
               className="modal-auth__link"
               onClick={() =>
-                setAuthMode(authMode === "login" ? "register" : "login")
+                handleModeChange(authMode === "login" ? "register" : "login")
               }
             >
               {authMode === "login" ? "Регистрация" : "У меня есть пароль"}

@@ -5,7 +5,19 @@ info:
 
 http:
   method: GET
-  url: https://cinemaguide.skillbox.cc/movie/random
+  url: https://cinemaguide.skillbox.cc/user
+  params:
+    - name: ""
+      value: ""
+      type: query
+  body:
+    type: json
+    data: |-
+      {    "email": "rainoflifeersd@gmail.com",
+        "password": "Qwery123",
+        "name": "Name",
+        "surname": "Surname"
+      }
   auth: inherit
 
 settings:
@@ -13,3 +25,4 @@ settings:
   timeout: 0
   followRedirects: true
   maxRedirects: 5
+​

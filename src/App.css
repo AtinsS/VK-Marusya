@@ -58,6 +58,7 @@ footer {
     padding-bottom: 4px;
     border-bottom: 2px solid transparent;
     margin-left: 20px;
+    text-decoration: none;
 
     &:hover,
     &.active {
