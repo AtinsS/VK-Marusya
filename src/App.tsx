@@ -14,6 +14,8 @@ import { AuthModal } from "./components/Modals/AuthModal";
 import { useEffect, useState } from "react";
 import { useAuth } from "./hooks/useAuth";
 import { ProfilePage } from "./pages/ProfilePage";
+import { ProfileFavorites } from "./components/Profile/ProfileFavorites";
+import { ProfileSettings } from "./components/Profile/ProfileSettings";
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +49,9 @@ export default function App() {
 
             {isAuth ? (
               <div>
-                <Link to="/profile" className="header__btn">
+                <NavLink to="/profile/settings" className="header__btn">
                   {user?.name ?? "Ввести имя"}
-                </Link>
+                </NavLink>
               </div>
             ) : (
               <button className="header__btn" onClick={() => setIsOpen(true)}>
@@ -65,7 +67,10 @@ export default function App() {
             <Route path="/genres" element={<GenresPage />}></Route>
             <Route path="/movie/:id" element={<FilmPage />} />
             <Route path="/genres/:genre" element={<GenreMoviesPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile" element={<ProfilePage />}>
+              <Route path="favorites" element={<ProfileFavorites />} />
+              <Route path="settings" element={<ProfileSettings />} />
+            </Route>
           </Routes>
         </main>
 

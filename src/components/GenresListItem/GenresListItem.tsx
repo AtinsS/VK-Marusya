@@ -4,6 +4,7 @@ import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import { GENRES } from "../../entities/movies/RuTranslate/genreTranslateRu";
 import "./GenresListItem.css";
+import { LoaderAll } from "../Loaders/LoaderAll";
 
 interface GenreListItemProps {
   genre: string;
@@ -42,7 +43,9 @@ export const GenresListItem = ({ genre }: GenreListItemProps) => {
       <Link to={`/genres/${genre}`} className="genres-page__link">
         {isLoading ? (
           <div className="genres-page__img-loading">
-            <div className="loading-spinner"></div>
+            <div className="loading-spinner">
+              <LoaderAll />
+            </div>
           </div>
         ) : (
           <img
