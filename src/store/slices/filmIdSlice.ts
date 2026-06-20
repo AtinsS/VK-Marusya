@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import type { RootState } from "../store";
-
-type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
+import type { RequestStatus } from "../../entities/auth/types";
 
 interface FilmIdState {
   movie: Movie | null;
@@ -33,8 +32,8 @@ export const fetchMovieById = createAsyncThunk<
   { rejectValue: string }
 >("filmId/fetchMovieById", async (id, { rejectWithValue }) => {
   try {
-  const data = await MoviesApi.getById(id);
-  return data;
+    const data = await MoviesApi.getById(id);
+    return data;
   } catch (error) {
     return rejectWithValue(
       getErrorMessage(error, "Не удалось загрузить информацию о фильме"),

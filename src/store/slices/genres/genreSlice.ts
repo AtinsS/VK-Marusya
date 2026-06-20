@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { MoviesApi } from "../../api/movies.api";
-import type { RootState } from "../store";
-
-type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
+import { MoviesApi } from "../../../api/movies.api";
+import type { RootState } from "../../store";
+import type { RequestStatus } from "../../../entities/auth/types";
 
 export interface GenreState {
   genres: string[];

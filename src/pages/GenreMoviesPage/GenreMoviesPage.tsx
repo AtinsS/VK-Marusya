@@ -1,107 +1,76 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { LoaderMovie } from "../../components/Loaders/LoaderMovie";
-import { MoviesApi } from "../../api/movies.api";
-import type { Movie } from "../../entities/movies/types";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  fetchMoviesGrouped,
+  selectGenreMovies,
+  selectGenreMoviesStatus,
+} from "../../store/slices/genres/genreMoviesSlice";
 import { GENRES } from "../../entities/movies/RuTranslate/genreTranslateRu";
 import "./GenreMoviesPage.css";
 import backIcon from "../../assets/back.svg";
 
-interface Props {
-  genre?: string;
-}
+export const GenreMoviesPage = () => {
+  const [visibleCount, setVisibleCount] = useState(10);
 
-export const GenreMoviesPage = ({ genre }: Props) => {
-  const [grouped, setGrouped] = useState<Record<string, Movie[]>>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>(
-    {},
-  );
+  const dispatch = useAppDispatch();
+  const groupedMovies = useAppSelector(selectGenreMovies);
+  const status = useAppSelector(selectGenreMoviesStatus);
 
-  const params = useParams();
-  const selectedGenre = genre ?? params.genre;
-
-  function getErrorMessage(error: unknown, fallback: string) {
-    if (error instanceof Error) return error.message;
-    return fallback;
-  }
+  const { genre } = useParams<{ genre: string }>();
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      setIsLoading(true);
-      try {
-        if (selectedGenre) {
-          const movies = await MoviesApi.getByGenre(selectedGenre);
-          setGrouped({ [selectedGenre]: movies });
-        }
-      } catch (error) {
-        setError(getErrorMessage(error, "Не удалось загрузить фильмы"));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchMovies();
-  }, [selectedGenre]);
+    // Загружаем сгруппированные фильмы
+    dispatch(fetchMoviesGrouped());
+  }, [dispatch]);
 
-  const handleShowMore = (genreKey: string) => {
-    setVisibleCounts((prev) => ({
-      ...prev,
-      [genreKey]: (prev[genreKey] ?? 10) + 10,
-    }));
+  const handleShowMore = () => {
+    setVisibleCount((prev) => prev + 10);
   };
 
-  if (isLoading) return <LoaderMovie />;
-  if (error) return <div className="error">Ошибка: {error}</div>;
+  if (status === "loading") return <LoaderMovie />;
+  if (status === "failed")
+    return <div className="error">Ошибка загрузки фильмов</div>;
+  if (!genre) return <div className="error">Жанр не указан</div>;
 
-  const genreKeys = Object.keys(grouped).sort();
-  const keysToShow = selectedGenre ? [selectedGenre] : genreKeys;
+  const allMovies = groupedMovies[genre] || [];
+  const moviesToShow = allMovies.slice(0, visibleCount);
+  const hasMore = allMovies.length > visibleCount;
 
   return (
     <div className="genre-page">
       <div className="genre-page__head">
         <Link to="/genres">
-          <img className="genre-page__back" src={backIcon} alt="arrow" />
+          <img className="genre-page__back" src={backIcon} alt="Назад" />
         </Link>
-        <h1 className="genre-page__title">{GENRES[selectedGenre]}</h1>
+        <h1 className="genre-page__title">{GENRES[genre] || genre}</h1>
       </div>
 
-      {keysToShow.length === 0 ? (
+      {allMovies.length === 0 ? (
         <p className="genre-page__status">Фильмы не найдены</p>
       ) : (
-        keysToShow.map((g) => {
-          const movies = grouped[g] || [];
-          const limit = visibleCounts[g] ?? 10;
-          const moviesToShow = movies.slice(0, limit);
-          const hasMore = movies.length > limit;
+        <>
+          <ul className="genre-page__list">
+            {moviesToShow.map((movie) => (
+              <li key={movie.id} className="genre-page__item">
+                <Link to={`/movie/${movie.id}`}>
+                  <img
+                    src={movie.posterUrl}
+                    alt={movie.title}
+                    className="genre-page__img"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-          return (
-            <section key={g}>
-              <ul className="genre-page__list">
-                {moviesToShow.map((movie) => (
-                  <Link key={movie.id} to={`/movie/${movie.id}`}>
-                    <li className="genre-page__item">
-                      <img
-                        src={movie.posterUrl}
-                        alt={movie.title}
-                        className="genre-page__img"
-                      />
-                    </li>
-                  </Link>
-                ))}
-              </ul>
-
-              {hasMore && (
-                <button
-                  className="genre-page__btn"
-                  onClick={() => handleShowMore(g)}
-                >
-                  Показать ещё
-                </button>
-              )}
-            </section>
-          );
-        })
+          {hasMore && (
+            <button className="genre-page__btn" onClick={handleShowMore}>
+              Показать ещё
+            </button>
+          )}
+        </>
       )}
     </div>
   );

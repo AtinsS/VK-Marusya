@@ -49,7 +49,7 @@ export default function App() {
 
             {isAuth ? (
               <div>
-                <NavLink to="/profile/settings" className="header__btn">
+                <NavLink to="/profile/favorites" className="header__btn">
                   {user?.name ?? "Ввести имя"}
                 </NavLink>
               </div>

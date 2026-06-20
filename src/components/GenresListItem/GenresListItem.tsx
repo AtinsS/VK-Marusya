@@ -28,7 +28,7 @@ export const GenresListItem = ({ genre }: GenreListItemProps) => {
           setIsLoading(false);
         }
       } catch (error) {
-        console.error("Error fetching backdrop:", error);
+        console.error("Ошибка получения фильмов", error);
       }
     };
 

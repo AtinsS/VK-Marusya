@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import homeReducer from "./slices/homeSlice";
-import genreReducer from "./slices/genreSlice";
+import genreReducer from "./slices/genres/genreSlice";
 import filmIdReducer from "./slices/filmIdSlice";
-import genreMoviesReducer from "./slices/genreMoviesSlice";
+import genreMoviesReducer from "./slices/genres/genreMoviesSlice";
 import authReducer from "./slices/authSlice";
+import favoriteReducer from "./slices/favorite/getFavoritesSlice";
+import postfavoriteReducer from "./slices/favorite/postDelFavoriteSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     filmId: filmIdReducer,
     genreMovies: genreMoviesReducer,
     auth: authReducer,
+    favorite: favoriteReducer,
+    postFavorite: postfavoriteReducer,
   },
 });
 

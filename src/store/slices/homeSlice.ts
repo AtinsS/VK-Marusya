@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import type { RootState } from "../store";
-
-type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
+import type { RequestStatus } from "../../entities/auth/types";
 
 interface HomeState {
   randomMovie: Movie | null;

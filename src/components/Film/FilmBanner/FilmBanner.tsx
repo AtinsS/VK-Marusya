@@ -1,6 +1,7 @@
 import { useState } from "react";
 import heartIcon from "../../../assets/banner/heart.svg";
-import { useAppSelector } from "../../../store/hooks";
+import heartAddIcon from "../../../assets/banner/heart_add.svg";
+import { useAppSelector, useAppDispatch } from "../../../store/hooks";
 import {
   selectFilmById,
   selectFilmByIdError,
@@ -11,6 +12,16 @@ import { TrailerModal } from "../../Modals/TrailerModal";
 import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
 import { LoaderMovie } from "../../Loaders/LoaderMovie";
 import { formatRuntime } from "../../../utils/utils";
+import { useAuth } from "../../../hooks/useAuth";
+import { AuthModal } from "../../Modals/AuthModal";
+import {
+  fetchPostFavorite,
+  fetchDelFavorite,
+} from "../../../store/slices/favorite/postDelFavoriteSlice";
+import {
+  fetchFavorites,
+  selectFavorites,
+} from "../../../store/slices/favorite/getFavoritesSlice";
 
 export const FilmBanner = () => {
   const movie = useAppSelector(selectFilmById);
@@ -25,6 +36,35 @@ export const FilmBanner = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const genres = movie?.genres.map((genre) => GENRES[genre]).join(", ");
+
+  const dispatch = useAppDispatch();
+  const { isAuth } = useAuth();
+  const allFavorites = useAppSelector(selectFavorites);
+
+  const isFavorite =
+    movie && isAuth
+      ? allFavorites.some((f) => String(f.id) === String(movie.id))
+      : false;
+
+  const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
+
+  const handleFavorite = async () => {
+    if (!isAuth) {
+      setIsOpenModalAuth(true);
+      return;
+    }
+    if (!movie) return;
+    try {
+      if (isFavorite) {
+        await dispatch(fetchDelFavorite(movie.id)).unwrap();
+      } else {
+        await dispatch(fetchPostFavorite(movie.id)).unwrap();
+      }
+      void dispatch(fetchFavorites());
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <div className="random-banner">
@@ -66,12 +106,19 @@ export const FilmBanner = () => {
               }}
             />
           )}
+
           <button
             className="random-banner__button random-banner__button--favorite"
-            aria-label="В избранное"
+            aria-label={
+              isFavorite ? "Удалить из избранного" : "Добавить в избранное"
+            }
+            onClick={handleFavorite}
           >
-            <img src={heartIcon} alt="" />
+            <img src={isFavorite ? heartAddIcon : heartIcon} alt="сердечко" />
           </button>
+          {isOpenModalAuth && (
+            <AuthModal onClose={() => setIsOpenModalAuth(false)} />
+          )}
         </div>
       </div>
       <div className="random-banner__right">

@@ -1,9 +1,8 @@
+import { MoviesApi } from "../../../api/movies.api";
+import type { Movie } from "../../../entities/movies/types";
+import type { RootState } from "../../store";
+import type { RequestStatus } from "../../../entities/auth/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { MoviesApi } from "../../api/movies.api";
-import type { Movie } from "../../entities/movies/types";
-import type { RootState } from "../store";
-
-type RequestStatus = "idle" | "loading" | "succeeded" | "failed";
 
 export interface GenreMoviesState {
   movies: Record<string, Movie[]>;
@@ -17,7 +16,7 @@ export const initialState: GenreMoviesState = {
   error: null,
 };
 
-const getErrorMessage = (error: unknown, fallback: string) => {
+const getErrorMessage = (error: unknown, fallback: string): string => {
   if (error instanceof Error) {
     return error.message;
   }
@@ -30,11 +29,29 @@ export const fetchMoviesGrouped = createAsyncThunk<
   { rejectValue: string }
 >("genreMovies/fetchGrouped", async (_, { rejectWithValue }) => {
   try {
-    const grouped = await MoviesApi.getGroupedByGenre();
+    const genres = await MoviesApi.getGenres();
+
+    // Для каждого жанра получаем фильмы
+    const grouped: Record<string, Movie[]> = {};
+
+    await Promise.all(
+      genres.map(async (genre) => {
+        try {
+          const movies = await MoviesApi.getByGenre(genre);
+          grouped[genre] = movies;
+        } catch (error) {
+          console.warn(
+            `Не удалось загрузить фильмы для жанра ${genre}:`,
+            error,
+          );
+        }
+      }),
+    );
+
     return grouped;
   } catch (error) {
     return rejectWithValue(
-      getErrorMessage(error, "Не удалось загрузить сгруппированные фильмы"),
+      getErrorMessage(error, "Не удалось загрузить фильмы"),
     );
   }
 });
@@ -55,14 +72,12 @@ const genreMoviesSlice = createSlice({
       })
       .addCase(fetchMoviesGrouped.rejected, (state, action) => {
         state.status = "failed";
-        state.error =
-          action.payload ?? "Не удалось загрузить сгруппированные фильмы";
+        state.error = action.payload ?? "Не удалось загрузить фильмы";
       });
   },
 });
 
-export const selectGenreMovies = (state: RootState) =>
-  state.genreMovies.movies as Record<string, Movie[]>;
+export const selectGenreMovies = (state: RootState) => state.genreMovies.movies;
 export const selectGenreMoviesStatus = (state: RootState) =>
   state.genreMovies.status;
 export const selectGenreMoviesError = (state: RootState) =>

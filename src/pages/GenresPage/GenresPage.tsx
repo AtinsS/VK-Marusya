@@ -6,7 +6,7 @@ import {
   selectGenres,
   selectGenreStatus,
   selectGenreError,
-} from "../../store/slices/genreSlice";
+} from "../../store/slices/genres/genreSlice";
 import "./GenresPage.css";
 import { LoaderGenre } from "../../components/Loaders/LoaderGenre";
 
