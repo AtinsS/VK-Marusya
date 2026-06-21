@@ -1,0 +1,1 @@
+export { LoaderMovie } from "./LoaderMovie";
