@@ -27,22 +27,26 @@
 }
 
 .random-banner__rating {
-    background: #308E21;
+    background-color: var(--rating-color);
     color: white;
-    padding: 6px 18px 6px 24px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-weight: bold;
-    background-image: url(../../../assets/banner/star.svg);
-    background-repeat: no-repeat;
-    background-size: 16px;
-    background-position: 7px center;
     width: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
     line-height: 1.2;
+    gap: 8px;
 }
+
+
+.random-banner__rating::before {
+    content: "★";
+    font-size: 18px;
+}
+
 
 .random-banner__title {
     font-size: 48px;

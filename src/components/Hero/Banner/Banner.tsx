@@ -14,7 +14,7 @@ import { TrailerModal } from "../../Modals/TrailerModal";
 import { useState, useEffect } from "react";
 import { LoaderMovie } from "../../Loaders/LoaderMovie";
 import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
-import { formatRuntime } from "../../../utils/utils";
+import { formatRuntime, ratingColor } from "../../../utils/utils";
 import {
   fetchPostFavorite,
   fetchDelFavorite,
@@ -82,18 +82,23 @@ export const Banner = () => {
     <div className="random-banner">
       <div className="random-banner__left">
         {isLoading && !movie ? (
-          <div className="random-banner__status">
-            <LoaderMovie />
-          </div>
+          <div className="random-banner__status">Ждёмс...</div>
         ) : movie ? (
           <div className="random-banner__info">
-            <span className="random-banner__rating">
+            <span
+              className="random-banner__rating"
+              style={
+                {
+                  "--rating-color": ratingColor(movie.tmdbRating),
+                } as React.CSSProperties
+              }
+            >
               {movie.tmdbRating?.toFixed(1) || "N/A"}
             </span>
             <span className="random-banner__year">
               {movie.releaseYear || "N/A"}
             </span>
-            <span className="random-banner__genre">{genres}</span>
+            <span className="film-banne__genre">{genres}</span>
             <span className="random-banner__duration">
               {movie.runtime ? formatRuntime(movie.runtime) : "N/A"}
             </span>

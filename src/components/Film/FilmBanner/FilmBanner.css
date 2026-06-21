@@ -1,18 +1,18 @@
-.random-banner {
+.film-banner {
     display: flex;
     padding: 40px;
     border-radius: 16px;
     gap: 40px;
 }
 
-.random-banner__left {
+.film-banner__left {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 40px;
 }
 
-.random-banner__info {
+.film-banner__info {
     display: flex;
     align-items: center;
     gap: 16px;
@@ -20,31 +20,33 @@
     color: #ffffff;
 }
 
-.random-banner__status {
+.film-banner__status {
     margin: 0;
     font-size: 18px;
     color: #a0a0a0;
 }
 
-.random-banner__rating {
-    background: #308E21;
+.film-banner__rating {
+    background-color: var(--rating-color);
     color: white;
-    padding: 6px 18px 6px 24px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-weight: bold;
-    background-image: url(../../../assets/banner/star.svg);
-    background-repeat: no-repeat;
-    background-size: 16px;
-    background-position: 7px center;
     width: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
     line-height: 1.2;
+    gap: 8px;
 }
 
-.random-banner__title {
+.film-banner__rating::before {
+    content: "★";
+    font-size: 18px;
+}
+
+.film-banner__title {
     font-size: 48px;
     font-weight: bold;
     color: white;
@@ -52,21 +54,21 @@
     line-height: 1.2;
 }
 
-.random-banner__description {
+.film-banner__description {
     font-size: 24px;
     color: #a0a0a0;
     line-height: 1.5;
     margin: 0;
 }
 
-.random-banner__actions {
+.film-banner__actions {
     display: flex;
     gap: 12px;
     margin-top: 10px;
     align-items: center;
 }
 
-.random-banner__button {
+.film-banner__button {
     padding: 16px 48px;
     border: none;
     font-size: 16px;
@@ -78,24 +80,24 @@
     border-radius: 28px;
 }
 
-.random-banner__button:disabled {
+.film-banner__button:disabled {
     cursor: wait;
     opacity: 0.65;
 }
 
-.random-banner__button--trailer {
+.film-banner__button--trailer {
     background: #3498db;
     color: white;
 }
 
-.random-banner__button--trailer:hover {
+.film-banner__button--trailer:hover {
     background: #2980b9;
 }
 
 
 
 
-.random-banner__button--favorite {
+.film-banner__button--favorite {
     padding: 16px 22px;
     background: #3a3a3a;
     display: flex;
@@ -103,15 +105,15 @@
     justify-content: center;
 }
 
-.random-banner__button--favorite:hover {
+.film-banner__button--favorite:hover {
     background: #4a4a4a;
 }
 
-.random-banner__right {
+.film-banner__right {
     flex: 0 0 400px;
 }
 
-.random-banner__image {
+.film-banner__image {
     width: 680px;
     height: 552px;
     object-fit: cover;

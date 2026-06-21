@@ -11,7 +11,7 @@ import "./FilmBanner.css";
 import { TrailerModal } from "../../Modals/TrailerModal";
 import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
 import { LoaderMovie } from "../../Loaders/LoaderMovie";
-import { formatRuntime } from "../../../utils/utils";
+import { formatRuntime, ratingColor } from "../../../utils/utils";
 import { useAuth } from "../../../hooks/useAuth";
 import { AuthModal } from "../../Modals/AuthModal";
 import {
@@ -67,29 +67,36 @@ export const FilmBanner = () => {
   };
 
   return (
-    <div className="random-banner">
-      <div className="random-banner__left">
+    <div className="film-banner">
+      <div className="film-banner__left">
         {movie ? (
-          <div className="random-banner__info">
-            <span className="random-banner__rating">
+          <div className="film-banner__info">
+            <span
+              className="film-banner__rating"
+              style={
+                {
+                  "--rating-color": ratingColor(movie.tmdbRating),
+                } as React.CSSProperties
+              }
+            >
               {movie.tmdbRating.toFixed(1)}
             </span>
-            <span className="random-banner__year">{movie.releaseYear}</span>
-            <span className="random-banner__genre">{genres}</span>
-            <span className="random-banner__duration">
+            <span className="film-banner__year">{movie.releaseYear}</span>
+            <span className="film-banner__genre">{genres}</span>
+            <span className="film-banner__duration">
               {formatRuntime(movie.runtime)}
             </span>
           </div>
         ) : (
-          <p className="random-banner__status">
+          <p className="film-banner__status">
             {isLoading ? "Загрузка..." : "Фильм не найден"}
           </p>
         )}
-        <h1 className="random-banner__title">{title}</h1>
-        <p className="random-banner__description">{description}</p>
-        <div className="random-banner__actions">
+        <h1 className="film-banner__title">{title}</h1>
+        <p className="film-banner__description">{description}</p>
+        <div className="film-banner__actions">
           <button
-            className="random-banner__button random-banner__button--trailer"
+            className="film-banner__button film-banner__button--trailer"
             onClick={() => {
               setIsOpen(true);
             }}
@@ -108,7 +115,7 @@ export const FilmBanner = () => {
           )}
 
           <button
-            className="random-banner__button random-banner__button--favorite"
+            className="film-banner__button film-banner__button--favorite"
             aria-label={
               isFavorite ? "Удалить из избранного" : "Добавить в избранное"
             }
@@ -121,10 +128,10 @@ export const FilmBanner = () => {
           )}
         </div>
       </div>
-      <div className="random-banner__right">
+      <div className="film-banner__right">
         {imageSrc ? (
           <img
-            className="random-banner__image"
+            className="film-banner__image"
             src={imageSrc}
             alt={movie?.title ?? ""}
           />
