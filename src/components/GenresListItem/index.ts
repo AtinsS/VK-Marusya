@@ -1,1 +1,0 @@
-export { GenresListItem } from "./GenresListItem";
