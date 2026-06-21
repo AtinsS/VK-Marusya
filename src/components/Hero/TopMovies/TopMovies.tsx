@@ -24,12 +24,12 @@ export const TopMovies = () => {
       {topMovies.length > 0 ? (
         <ul className="top-films__list">
           {topMovies.map((movie, index) => (
-            <Link key={movie.id} to={`/movie/${movie.id}`}>
-              <li className="top-films__item" key={movie.id}>
-                <span className="top-films__number">{index + 1}</span>
+            <li className="top-films__item" key={movie.id}>
+              <span className="top-films__number">{index + 1}</span>
+              <Link to={`/movie/${movie.id}`}>
                 <img src={movie.posterUrl} alt={movie.title} />
-              </li>
-            </Link>
+              </Link>
+            </li>
           ))}
         </ul>
       ) : null}

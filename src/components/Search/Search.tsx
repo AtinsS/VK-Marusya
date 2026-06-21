@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCombobox } from "downshift";
 import "./Search.css";
 import { formatRuntime, ratingColor } from "../../utils/utils";
@@ -7,11 +7,26 @@ import type { Movie } from "../../entities/movies/types";
 import { MoviesApi } from "../../api/movies.api";
 import { useDebounce } from "../../hooks/useDebounce";
 import { Link } from "react-router-dom";
+import searchIcon from "../../assets/search-mob.svg";
 
 export const Search = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [inputValue, setInputValue] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isExpanded) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsExpanded(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isExpanded]);
 
   const {
     isOpen,
@@ -59,9 +74,18 @@ export const Search = () => {
     performSearch();
   }, [debouncedInput]);
 
+  const expandSearch = () => {
+    setIsExpanded(true);
+    setTimeout(() => inputRef.current?.focus(), 0);
+  };
+
   return (
-    <div className="search">
+    <div ref={containerRef} className={`search${isExpanded ? " search--expanded" : ""}`}>
+      <button className="search__icon-btn" onClick={expandSearch} type="button">
+        <img src={searchIcon} alt="Поиск" />
+      </button>
       <input
+        ref={inputRef}
         {...getInputProps({
           placeholder: "Поиск",
           className: "search__input",

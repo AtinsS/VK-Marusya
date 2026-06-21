@@ -6,6 +6,8 @@ import vk from "./assets/vk.svg";
 import telegram from "./assets/telegram.svg";
 import youtube from "./assets/rutube.svg";
 import ok from "./assets/ok.svg";
+import genresIcon from "./assets/genres.svg";
+import profileIcon from "./assets/mistermob.svg";
 import { AuthModal } from "./components/Modals/AuthModal";
 import { Suspense, useEffect, useState } from "react";
 import { useAuth } from "./hooks/useAuth";
@@ -62,26 +64,49 @@ export default function App() {
               />
             </Link>
             <div className="header__links">
-              <NavLink className="header__link" to={"/"}>
-                Главная
+              <NavLink className="header__link header__link--home" to={"/"}>
+                <span className="header__link-text">Главная</span>
               </NavLink>
               <NavLink className="header__link" to={"/genres"}>
-                Жанры
+                <img className="header__link-icon" src={genresIcon} alt="" />
+                <span className="header__link-text">Жанры</span>
               </NavLink>
               <Search />
             </div>
-
             {isAuth ? (
-              <div>
-                <NavLink to="/profile/favorites" className="header__btn">
-                  {user?.name ?? "Ввести имя"}
-                </NavLink>
-              </div>
+              <NavLink
+                to="/profile/favorites"
+                className="header__btn header__btn--name"
+              >
+                {user?.name ?? "Ввести имя"}
+              </NavLink>
             ) : (
               <button className="header__btn" onClick={() => setIsOpen(true)}>
                 Войти
               </button>
             )}
+
+            <div className="header__mobile-icons">
+              <NavLink className="header__mobile-icon" to={"/genres"}>
+                <img src={genresIcon} alt="Жанры" />
+              </NavLink>
+              <Search />
+              {isAuth ? (
+                <NavLink
+                  to="/profile/favorites"
+                  className="header__mobile-icon"
+                >
+                  <img src={profileIcon} alt="Профиль" />
+                </NavLink>
+              ) : (
+                <button
+                  className="header__mobile-icon"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <img src={profileIcon} alt="Войти" />
+                </button>
+              )}
+            </div>
           </nav>
           {isOpen && <AuthModal onClose={() => setIsOpen(false)} />}
         </header>

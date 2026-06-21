@@ -106,3 +106,42 @@
 .genre-page__btn--enabled {
     display: block;
 }
+
+@media (max-width: 1279px) {
+    .genre-page__list {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .genre-page__list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .genre-page {
+        font-size: 22px;
+    }
+
+    .genre-page__list {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .genre-page__number {
+        width: 40px;
+        height: 32px;
+        font-size: 18px;
+        top: -8px;
+        left: -8px;
+    }
+
+    .genre-page__btn {
+        padding: 10px 24px;
+        font-size: 16px;
+        margin: 24px auto 0;
+    }
+}

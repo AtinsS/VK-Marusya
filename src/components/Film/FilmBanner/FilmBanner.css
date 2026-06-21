@@ -17,19 +17,19 @@
     align-items: center;
     gap: 16px;
     font-size: 18px;
-    color: #ffffff;
+    color: #666666;
 }
 
 .film-banner__status {
     margin: 0;
     font-size: 18px;
-    color: #a0a0a0;
+    color: #ffffffe3;
 }
 
 .film-banner__rating {
     background-color: var(--rating-color);
     color: white;
-    padding: 6px 12px;
+    padding: 6px 18px;
     border-radius: 20px;
     font-weight: bold;
     width: 32px;
@@ -41,10 +41,12 @@
     gap: 8px;
 }
 
+
 .film-banner__rating::before {
     content: "★";
     font-size: 18px;
 }
+
 
 .film-banner__title {
     font-size: 48px;
@@ -94,10 +96,19 @@
     background: #2980b9;
 }
 
+.film-banner__button--info {
+    background: #3a3a3a;
+    color: white;
+    text-decoration: none;
+}
+
+.film-banner__button--info:hover {
+    background: #4a4a4a;
+}
 
 
-
-.film-banner__button--favorite {
+.film-banner__button--favorite,
+.film-banner__button--update {
     padding: 16px 22px;
     background: #3a3a3a;
     display: flex;
@@ -105,8 +116,14 @@
     justify-content: center;
 }
 
-.film-banner__button--favorite:hover {
+.film-banner__button--favorite:hover,
+.film-banner__button--update:hover {
     background: #4a4a4a;
+}
+
+.film-banner__button--favorite img {
+    width: 20px;
+    height: 20px;
 }
 
 .film-banner__right {
@@ -118,4 +135,94 @@
     height: 552px;
     object-fit: cover;
     border-radius: 12px;
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+    .film-banner {
+        padding: 24px;
+        gap: 24px;
+    }
+
+    .film-banner__left {
+        gap: 24px;
+    }
+
+    .film-banner__right {
+        flex: 0 0 300px;
+    }
+
+    .film-banner__image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 680 / 552;
+    }
+
+    .film-banner__title {
+        font-size: 36px;
+    }
+
+    .film-banner__description {
+        font-size: 20px;
+    }
+
+    .film-banner__button {
+        padding: 12px 32px;
+        font-size: 18px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .film-banner {
+        flex-direction: column;
+        padding: 16px;
+        gap: 20px;
+    }
+
+    .film-banner__right {
+        flex: none;
+        width: 100%;
+        order: -1;
+    }
+
+    .film-banner__image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+    }
+
+    .film-banner__left {
+        gap: 16px;
+    }
+
+    .film-banner__info {
+        font-size: 14px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .film-banner__title {
+        font-size: 28px;
+    }
+
+    .film-banner__description {
+        font-size: 16px;
+    }
+
+    .film-banner__actions {
+        flex-wrap: wrap;
+    }
+
+    .film-banner__button {
+        padding: 14px 24px;
+    }
+
+    .film-banner__button--trailer {
+        width: 75%;
+    }
+
+    .film-banner__button--info {
+        padding: 14px 58px;
+    }
 }

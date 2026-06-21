@@ -31,3 +31,9 @@
         background-size: 100% auto
     }
 }
+
+@media (max-width: 767px) {
+    .loader-movie {
+        font-size: 24px;
+    }
+}

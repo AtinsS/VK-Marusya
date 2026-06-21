@@ -1,9 +1,9 @@
 .header,
 main,
 footer {
-    margin: 0 auto;
     max-width: 1400px;
     padding: 0 40px;
+    margin: 0 auto;
 }
 
 
@@ -13,12 +13,12 @@ footer {
     align-items: center;
     padding: 20px 0;
     justify-content: space-between;
+
 }
 
 /* Logo */
 .header__logo-img {
     width: 143px;
-    margin-right: 40px;
 }
 
 
@@ -39,11 +39,20 @@ footer {
     margin-right: 40px;
     padding-bottom: 4px;
     border-bottom: 2px solid transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
     &:hover,
     &.active {
         border-bottom-color: #DC5DFC;
     }
+}
+
+.header__link-icon {
+    display: none;
+    width: 24px;
+    height: 24px;
 }
 
 /* Button */
@@ -67,6 +76,11 @@ footer {
 
 }
 
+/* Mobile icons bar */
+.header__mobile-icons {
+    display: none;
+}
+
 
 /* Footer */
 .footer {
@@ -88,4 +102,79 @@ footer {
 
 .main {
     flex: 1;
+}
+
+/* ===== Tablet (max-width: 1023px) ===== */
+@media (max-width: 1023px) {
+
+    .header,
+    main,
+    footer {
+        padding: 0 20px;
+    }
+
+    .header__logo-img {
+        width: 120px;
+        margin-right: 24px;
+    }
+
+    .header__link,
+    .header__btn {
+        font-size: 1.2rem;
+        margin-right: 24px;
+    }
+}
+
+/* ===== Mobile (max-width: 767px) ===== */
+@media (max-width: 767px) {
+
+    .header,
+    main,
+    footer {
+        padding: 0 16px;
+    }
+
+    .header__navbar {
+        flex-wrap: nowrap;
+        gap: 0;
+    }
+
+    .header__links {
+        display: none;
+    }
+
+    .header__mobile-icons {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-left: auto;
+    }
+
+    .header__mobile-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 4px;
+        text-decoration: none;
+    }
+
+    .header__mobile-icon img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .header__logo-img {
+        width: 100px;
+    }
+
+    .footer {
+        justify-content: left;
+    }
+
+    .header__btn {
+        display: none;
+    }
 }

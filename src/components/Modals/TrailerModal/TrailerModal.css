@@ -58,3 +58,35 @@
   border-radius: 12px;
   overflow: hidden;
 }
+
+@media (max-width: 1023px) {
+  .modal-content {
+    max-width: 90vw;
+  }
+
+  .modal-close {
+    top: -35px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+  }
+
+  .modal-video-wrapper {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 767px) {
+  .modal-content {
+    max-width: 95vw;
+    border-radius: 8px;
+  }
+
+  .modal-close {
+    top: -32px;
+    right: -4px;
+    width: 32px;
+    height: 32px;
+  }
+}

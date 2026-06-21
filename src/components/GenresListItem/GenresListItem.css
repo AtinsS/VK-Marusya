@@ -29,3 +29,20 @@
 .genres-page__link{
     text-decoration: none;
 }
+
+@media (max-width: 1023px) {
+    .genres-page__img {
+        height: 220px;
+    }
+}
+
+@media (max-width: 767px) {
+    .genres-page__img {
+        height: 180px;
+    }
+
+    .genres-page__name {
+        font-size: 20px;
+        padding: 16px;
+    }
+}

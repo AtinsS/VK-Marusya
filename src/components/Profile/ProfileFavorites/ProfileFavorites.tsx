@@ -47,21 +47,19 @@ export const ProfileFavorites = () => {
             const movie = movies[idNumber];
             return (
               <li key={String(idNumber)} className="favorite__item">
-                <Link to={`/movie/${idNumber}`}>
-                  {movie ? (
-                    <>
-                      <img src={movie.posterUrl} alt={movie.title} />
-                    </>
-                  ) : (
-                    <div>Загрузка...</div>
-                  )}
-                </Link>
                 <button
                   onClick={() => handleDelete(idNumber)}
                   className="favorite__delete"
                 >
                   ×
                 </button>
+                <Link to={`/movie/${idNumber}`}>
+                  {movie ? (
+                    <img src={movie.posterUrl} alt={movie.title} />
+                  ) : (
+                    <div>Загрузка...</div>
+                  )}
+                </Link>
               </li>
             );
           })}

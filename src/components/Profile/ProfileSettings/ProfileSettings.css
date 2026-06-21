@@ -71,3 +71,17 @@
 .profile-settings__logout:hover {
     background-color: #5d7dc2;
 }
+
+@media (max-width: 767px) {
+    .profile-settings__list {
+        gap: 24px;
+    }
+
+    .profile-settings__content {
+        font-size: 20px;
+    }
+
+    .profile-settings__logout {
+        padding: 10px 32px;
+    }
+}

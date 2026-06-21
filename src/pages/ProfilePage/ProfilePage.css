@@ -42,3 +42,45 @@
     gap: 40px;
     margin-bottom: 60px;
 }
+
+.profile-page__link-mobile {
+    display: none;
+}
+
+@media (max-width: 1023px) {
+    .profile-page__title {
+        font-size: 36px;
+    }
+
+    .profile-page__nav-wrapper {
+        gap: 24px;
+    }
+
+    .profile-page__link {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .profile-page__title {
+        font-size: 24px;
+    }
+
+    .profile-page__nav-wrapper {
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 10px;
+    }
+
+    .profile-page__link {
+        font-size: 18px;
+    }
+
+    .profile-page__link-desktop {
+        display: none;
+    }
+
+    .profile-page__link-mobile {
+        display: inline;
+    }
+}
