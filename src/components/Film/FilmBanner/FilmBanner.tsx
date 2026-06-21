@@ -1,7 +1,7 @@
 import { useState } from "react";
 import heartIcon from "../../../assets/banner/heart.svg";
 import heartAddIcon from "../../../assets/banner/heart_add.svg";
-import { useAppSelector, useAppDispatch } from "../../../store/hooks";
+import { useAppSelector } from "../../../store/hooks";
 import {
   selectFilmById,
   selectFilmByIdError,
@@ -10,18 +10,10 @@ import {
 import "./FilmBanner.css";
 import { TrailerModal } from "../../Modals/TrailerModal";
 import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
-import { LoaderMovie } from "../../Loaders/LoaderMovie";
+import { Loader } from "../../Loaders/Loader";
 import { formatRuntime, ratingColor } from "../../../utils/utils";
-import { useAuth } from "../../../hooks/useAuth";
 import { AuthModal } from "../../Modals/AuthModal";
-import {
-  fetchPostFavorite,
-  fetchDelFavorite,
-} from "../../../store/slices/favorite/postDelFavoriteSlice";
-import {
-  fetchFavorites,
-  selectFavorites,
-} from "../../../store/slices/favorite/getFavoritesSlice";
+import { useFavorite } from "../../../hooks/useFavorite";
 
 export const FilmBanner = () => {
   const movie = useAppSelector(selectFilmById);
@@ -30,41 +22,15 @@ export const FilmBanner = () => {
 
   const imageSrc = movie?.backdropUrl || movie?.posterUrl;
   const title =
-    movie?.title ?? (isLoading ? <LoaderMovie /> : "Фильм не найден");
+    movie?.title ?? (isLoading ? <Loader variant="movie" /> : "Фильм не найден");
   const description = movie?.plot ?? error ?? "Загружаем информацию о фильме";
 
   const [isOpen, setIsOpen] = useState(false);
 
   const genres = movie?.genres.map((genre) => GENRES[genre]).join(", ");
 
-  const dispatch = useAppDispatch();
-  const { isAuth } = useAuth();
-  const allFavorites = useAppSelector(selectFavorites);
-
-  const isFavorite =
-    movie && isAuth
-      ? allFavorites.some((f) => String(f.id) === String(movie.id))
-      : false;
-
-  const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
-
-  const handleFavorite = async () => {
-    if (!isAuth) {
-      setIsOpenModalAuth(true);
-      return;
-    }
-    if (!movie) return;
-    try {
-      if (isFavorite) {
-        await dispatch(fetchDelFavorite(movie.id)).unwrap();
-      } else {
-        await dispatch(fetchPostFavorite(movie.id)).unwrap();
-      }
-      void dispatch(fetchFavorites());
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const { isFavorite, handleFavorite, isOpenModalAuth, setIsOpenModalAuth } =
+    useFavorite(movie?.id);
 
   return (
     <div className="film-banner">

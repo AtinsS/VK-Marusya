@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { isAxiosError } from "axios";
 import type {
   RequestStatus,
   SuccessfulResult,
   User,
 } from "../../entities/auth/types";
 import { AuthApi } from "../../api/auth.api";
+import { getErrorMessage } from "../../utils/utils";
 
 interface AuthState {
   user: User | null;
@@ -20,24 +20,6 @@ const initialState: AuthState = {
   error: null,
 };
 
-const getErrorMessage = (error: unknown, fallback: string): string => {
-  if (isAxiosError(error)) {
-    const data = error.response?.data;
-
-    if (typeof data === "object" && data !== null) {
-      const maybeError = "error" in data ? data.error : null;
-      const maybeMessage = "message" in data ? data.message : null;
-
-      if (typeof maybeError === "string") return maybeError;
-      if (typeof maybeMessage === "string") return maybeMessage;
-    }
-  }
-
-  if (error instanceof Error) return error.message;
-  return fallback;
-};
-
-//Санка на проверку авторизации
 export const checkAuth = createAsyncThunk<User, void, { rejectValue: string }>(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
@@ -52,7 +34,6 @@ export const checkAuth = createAsyncThunk<User, void, { rejectValue: string }>(
   },
 );
 
-//Санка на Логин
 export const login = createAsyncThunk<
   User,
   { email: string; password: string },
@@ -67,7 +48,6 @@ export const login = createAsyncThunk<
   }
 });
 
-//Санка на регистер
 export const register = createAsyncThunk<
   SuccessfulResult,
   { email: string; password: string; name: string; surname: string },
@@ -85,7 +65,6 @@ export const register = createAsyncThunk<
     return rejectWithValue(getErrorMessage(error, "Ошибка регистрации"));
   }
 });
-//Санка на логаут
 export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
   "auth/logout",
   async (_, { rejectWithValue }) => {
@@ -107,8 +86,6 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-
-      //Чек аутх
       .addCase(checkAuth.pending, (state) => {
         state.status = "loading";
       })
@@ -123,7 +100,6 @@ const authSlice = createSlice({
         state.isAuth = false;
         state.error = null;
       })
-      // Логин
       .addCase(login.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -139,7 +115,6 @@ const authSlice = createSlice({
         state.isAuth = false;
         state.error = action.payload ?? action.error.message ?? "Ошибка входа";
       })
-      //Регистер
       .addCase(register.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -154,7 +129,6 @@ const authSlice = createSlice({
         state.error =
           action.payload ?? action.error.message ?? "Ошибка регистрации";
       })
-      //Логаут
       .addCase(logout.pending, (state) => {
         state.status = "loading";
         state.error = null;

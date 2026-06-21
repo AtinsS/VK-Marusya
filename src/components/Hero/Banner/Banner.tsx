@@ -11,72 +11,31 @@ import {
 } from "../../../store/slices/homeSlice";
 import "./Banner.css";
 import { TrailerModal } from "../../Modals/TrailerModal";
-import { useState, useEffect } from "react";
-import { LoaderMovie } from "../../Loaders/LoaderMovie";
+import { useState } from "react";
+import { Loader } from "../../Loaders/Loader";
 import { GENRES } from "../../../entities/movies/RuTranslate/genreTranslateRu";
 import { formatRuntime, ratingColor } from "../../../utils/utils";
-import {
-  fetchPostFavorite,
-  fetchDelFavorite,
-} from "../../../store/slices/favorite/postDelFavoriteSlice";
-import {
-  fetchFavorites,
-  selectFavorites,
-} from "../../../store/slices/favorite/getFavoritesSlice";
 import { AuthModal } from "../../Modals/AuthModal";
-import { useAuth } from "../../../hooks/useAuth";
+import { useFavorite } from "../../../hooks/useFavorite";
 
 export const Banner = () => {
   const dispatch = useAppDispatch();
   const movie = useAppSelector(selectRandomMovie);
   const isLoading = useAppSelector(selectIsRandomMovieLoading);
   const error = useAppSelector(selectRandomMovieError);
-  const allFavorites = useAppSelector(selectFavorites);
-
-  const { isAuth } = useAuth();
 
   const imageSrc = movie?.backdropUrl || movie?.posterUrl;
-  const title = movie?.title ?? <LoaderMovie />;
+  const title = movie?.title ?? <Loader variant="movie" />;
   const description =
     movie?.plot ?? error ?? "Подбираем случайный фильм для главного баннера";
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenModalAuth, setIsOpenModalAuth] = useState(false);
 
   const genres =
     movie?.genres?.map((genre) => GENRES[genre] || genre).join(", ") || "";
 
-  const isFavorite =
-    movie && isAuth
-      ? allFavorites.some((f) => String(f.id) === String(movie.id))
-      : false;
-
-  useEffect(() => {
-    if (isAuth) {
-      dispatch(fetchFavorites());
-    }
-  }, [isAuth, dispatch]);
-
-  const handleFavorite = async () => {
-    if (!isAuth) {
-      setIsOpenModalAuth(true);
-      return;
-    }
-
-    if (!movie) return;
-
-    try {
-      if (isFavorite) {
-        await dispatch(fetchDelFavorite(movie.id)).unwrap();
-      } else {
-        await dispatch(fetchPostFavorite(movie.id)).unwrap();
-      }
-      // Обновляем список избранных после изменения
-      await dispatch(fetchFavorites());
-    } catch (err) {
-      console.error("Ошибка при добавлении в избранное", err);
-    }
-  };
+  const { isFavorite, handleFavorite, isOpenModalAuth, setIsOpenModalAuth } =
+    useFavorite(movie?.id);
 
   return (
     <div className="random-banner">

@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RequestStatus } from "../../../entities/auth/types";
 import { FavoriteApi } from "../../../api/favorites.api";
 import type { RootState } from "../../store";
+import { getErrorMessage } from "../../../utils/utils";
 
 interface ToggleFavoriteState {
   status: RequestStatus;
@@ -13,22 +14,13 @@ const initialState: ToggleFavoriteState = {
   error: null,
 };
 
-const getErrorMessage = (error: unknown, fallback: string): string => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return fallback;
-};
-
-//Санка на добавление в избранное
 export const fetchPostFavorite = createAsyncThunk<
-  number, // Возвращаем ID фильма, который добавили в избранное
-  number, // Принимаем ID фильма как аргумент
+  number,
+  number,
   { rejectValue: string }
 >("postFavorite/fetchPostFavorite", async (id, { rejectWithValue }) => {
   try {
     await FavoriteApi.addFavorite(id);
-    console.log(`Фильм добавлен в избранное ${id}`);
     return id;
   } catch (error) {
     return rejectWithValue(
@@ -37,15 +29,13 @@ export const fetchPostFavorite = createAsyncThunk<
   }
 });
 
-//Санка на удаление из избранного
 export const fetchDelFavorite = createAsyncThunk<
-  number, // Возвращаем ID фильма, который удалили из избранного
-  number, // Принимаем ID фильма как аргумент
+  number,
+  number,
   { rejectValue: string }
 >("delFavorite/fetchDelFavorite", async (id, { rejectWithValue }) => {
   try {
     await FavoriteApi.removeFavorite(id);
-    console.log(`Фильм удален из избранного ${id}`);
     return id;
   } catch (error) {
     return rejectWithValue(
@@ -65,7 +55,6 @@ export const toggleFavoriteSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      //Слайс на добавление в избранное
       .addCase(fetchPostFavorite.pending, (state) => {
         state.status = "loading";
         state.error = null;
@@ -78,7 +67,6 @@ export const toggleFavoriteSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || "Не удалось добавить в избранное";
       })
-      //Слайс на удаление из избранного
       .addCase(fetchDelFavorite.pending, (state) => {
         state.status = "loading";
         state.error = null;

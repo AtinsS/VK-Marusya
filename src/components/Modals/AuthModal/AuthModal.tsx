@@ -89,11 +89,7 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
             )}
 
             {/*  Ошибка основная */}
-            {error && (
-              <p className="modal-auth__error">
-                {`Ошибка: ${error}`}
-              </p>
-            )}
+            {error && <p className="modal-auth__error">{`Ошибка: ${error}`}</p>}
 
             {/* Логин */}
             {authMode === "login" && (
@@ -104,27 +100,24 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
                 <input
                   {...loginRegister("email")}
                   type="email"
-                  className="modal-auth__input modal-auth__input--email"
+                  className={`modal-auth__input modal-auth__input--email ${
+                    loginErrors.email
+                      ? "modal-auth__input--error modal-auth__input--emailRed"
+                      : ""
+                  }`}
                   placeholder="Электронная почта"
                 />
-                {loginErrors.email && (
-                  <p className="modal-auth__error">
-                    {loginErrors.email.message}
-                  </p>
-                )}
 
                 <input
                   {...loginRegister("password")}
                   type="password"
-                  className="modal-auth__input modal-auth__input--password"
+                  className={`modal-auth__input modal-auth__input--password ${
+                    loginErrors.email
+                      ? "modal-auth__input--error modal-auth__input--passwordRed"
+                      : ""
+                  }`}
                   placeholder="Пароль"
                 />
-                {loginErrors.password && (
-                  <p className="modal-auth__error">
-                    {loginErrors.password.message}
-                  </p>
-                )}
-
                 <button
                   type="submit"
                   className="modal-auth__button"
@@ -144,50 +137,45 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
                 <input
                   {...registerRegister("email")}
                   type="email"
-                  className="modal-auth__input modal-auth__input--email"
+                  className={`modal-auth__input modal-auth__input--email ${
+                    loginErrors.email
+                      ? "modal-auth__input--error modal-auth__input--emailRed"
+                      : ""
+                  }`}
                   placeholder="sample@domain.ru"
                 />
-                {registerErrors.email && (
-                  <p className="modal-auth__error">
-                    {registerErrors.email.message}
-                  </p>
-                )}
 
                 <input
                   {...registerRegister("name")}
                   type="text"
-                  className="modal-auth__input modal-auth__input--name"
+                  className={`modal-auth__input modal-auth__input--name ${
+                    loginErrors.email
+                      ? "modal-auth__input--error modal-auth__input--nameRed"
+                      : ""
+                  }`}
                   placeholder="Имя"
                 />
-                {registerErrors.name && (
-                  <p className="modal-auth__error">
-                    {registerErrors.name.message}
-                  </p>
-                )}
-
                 <input
                   {...registerRegister("surname")}
                   type="text"
-                  className="modal-auth__input modal-auth__input--name"
+                  className={`modal-auth__input modal-auth__input--name ${
+                    loginErrors.email
+                      ? "modal-auth__input--error modal-auth__input--nameRed"
+                      : ""
+                  }`}
                   placeholder="Фамилия"
                 />
-                {registerErrors.surname && (
-                  <p className="modal-auth__error">
-                    {registerErrors.surname.message}
-                  </p>
-                )}
 
                 <input
                   {...registerRegister("password")}
                   type="password"
-                  className="modal-auth__input modal-auth__input--password"
+                  className={`modal-auth__input modal-auth__input--password ${
+                    loginErrors.email
+                      ? "modal-auth__input--error modal-auth__input--passwordRed"
+                      : ""
+                  }`}
                   placeholder="Пароль"
                 />
-                {registerErrors.password && (
-                  <p className="modal-auth__error">
-                    {registerErrors.password.message}
-                  </p>
-                )}
 
                 <input
                   {...registerRegister("confirmPassword")}
@@ -198,6 +186,11 @@ export const AuthModal = ({ onClose }: { onClose: () => void }) => {
                 {registerErrors.confirmPassword && (
                   <p className="modal-auth__error">
                     {registerErrors.confirmPassword.message}
+                  </p>
+                )}
+                {registerErrors.password && (
+                  <p className="modal-auth__error">
+                    {registerErrors.password.message}
                   </p>
                 )}
 

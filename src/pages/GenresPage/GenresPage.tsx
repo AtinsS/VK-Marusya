@@ -8,7 +8,7 @@ import {
   selectGenreError,
 } from "../../store/slices/genres/genreSlice";
 import "./GenresPage.css";
-import { LoaderGenre } from "../../components/Loaders/LoaderGenre";
+import { Loader } from "../../components/Loaders/Loader";
 
 export const GenresPage = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +25,7 @@ export const GenresPage = () => {
   if (status === "loading") {
     return (
       <div>
-        <LoaderGenre />
+        <Loader variant="genre" />
       </div>
     );
   }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCombobox } from "downshift";
 import "./Search.css";
-import { formatRuntime } from "../../utils/utils";
+import { formatRuntime, ratingColor } from "../../utils/utils";
 import { GENRES } from "../../entities/movies/RuTranslate/genreTranslateRu";
 import type { Movie } from "../../entities/movies/types";
 import { MoviesApi } from "../../api/movies.api";
@@ -94,7 +94,14 @@ export const Search = () => {
                 />
                 <div className="search-item__info">
                   <div className="search-item__breadcrumbs">
-                    <span className="search-item__rating">
+                    <span
+                      className="search-item__rating"
+                      style={
+                        {
+                          "--rating-color": ratingColor(movie.tmdbRating),
+                        } as React.CSSProperties
+                      }
+                    >
                       {(movie.tmdbRating ?? 0).toFixed(1)}
                     </span>
                     <span className="search-item__year">

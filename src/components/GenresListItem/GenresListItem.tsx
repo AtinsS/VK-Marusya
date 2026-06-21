@@ -4,7 +4,7 @@ import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import { GENRES } from "../../entities/movies/RuTranslate/genreTranslateRu";
 import "./GenresListItem.css";
-import { LoaderAll } from "../Loaders/LoaderAll";
+import { Loader } from "../Loaders/Loader";
 
 interface GenreListItemProps {
   genre: string;
@@ -22,13 +22,13 @@ export const GenresListItem = ({ genre }: GenreListItemProps) => {
     const fetchBackdrop = async () => {
       try {
         const movies: Movie[] = await MoviesApi.getByGenre(genre);
-        const backdrop = movies[10].backdropUrl;
+        const backdrop = movies[10]?.backdropUrl;
         if (mounted) {
           setBackdropUrl(backdrop);
           setIsLoading(false);
         }
-      } catch (error) {
-        console.error("Ошибка получения фильмов", error);
+      } catch {
+        // skip failed backdrop
       }
     };
 
@@ -44,7 +44,7 @@ export const GenresListItem = ({ genre }: GenreListItemProps) => {
         {isLoading ? (
           <div className="genres-page__img-loading">
             <div className="loading-spinner">
-              <LoaderAll />
+              <Loader />
             </div>
           </div>
         ) : (

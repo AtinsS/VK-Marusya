@@ -5,7 +5,7 @@ import {
   selectFilmByIdError,
   selectIsFilmByIdLoading,
 } from "../../../store/slices/filmIdSlice";
-import { LoaderAll } from "../../Loaders/LoaderAll";
+import { Loader } from "../../Loaders/Loader";
 
 import "./FilmInfo.css";
 
@@ -28,7 +28,7 @@ export const FilmInfo = () => {
   return (
     <div className="film-info">
       <h1 className="film-info__title">О фильме</h1>
-      {isLoading ? <LoaderAll /> : null}
+      {isLoading ? <Loader /> : null}
       {error ? <p className="film-info__status">{error}</p> : null}
       {!isLoading && !error && !movie ? (
         <p className="film-info__status">Информация о фильме не найдена</p>

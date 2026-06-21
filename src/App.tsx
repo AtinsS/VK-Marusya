@@ -1,21 +1,45 @@
 import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom";
 import { Search } from "./components/Search";
-import { FilmPage } from "./pages/FilmPage/FilmPage";
-import { HomePage } from "./pages/HomePage/HomePage";
 import "./App.css";
-import { GenresPage } from "./pages/GenresPage";
-import { GenreMoviesPage } from "./pages/GenreMoviesPage/GenreMoviesPage";
 import Logo from "./assets/Logo.svg";
 import vk from "./assets/vk.svg";
 import telegram from "./assets/telegram.svg";
 import youtube from "./assets/rutube.svg";
 import ok from "./assets/ok.svg";
 import { AuthModal } from "./components/Modals/AuthModal";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useAuth } from "./hooks/useAuth";
-import { ProfilePage } from "./pages/ProfilePage";
-import { ProfileFavorites } from "./components/Profile/ProfileFavorites";
-import { ProfileSettings } from "./components/Profile/ProfileSettings";
+import { PrivateRoute } from "./components/PrivateRoute";
+import { Loader } from "./components/Loaders/Loader";
+import { lazy } from "react";
+
+const HomePage = lazy(() =>
+  import("./pages/HomePage/HomePage").then((m) => ({ default: m.HomePage })),
+);
+const GenresPage = lazy(() =>
+  import("./pages/GenresPage").then((m) => ({ default: m.GenresPage })),
+);
+const FilmPage = lazy(() =>
+  import("./pages/FilmPage/FilmPage").then((m) => ({ default: m.FilmPage })),
+);
+const GenreMoviesPage = lazy(() =>
+  import("./pages/GenreMoviesPage/GenreMoviesPage").then((m) => ({
+    default: m.GenreMoviesPage,
+  })),
+);
+const ProfilePage = lazy(() =>
+  import("./pages/ProfilePage").then((m) => ({ default: m.ProfilePage })),
+);
+const ProfileFavorites = lazy(() =>
+  import("./components/Profile/ProfileFavorites").then((m) => ({
+    default: m.ProfileFavorites,
+  })),
+);
+const ProfileSettings = lazy(() =>
+  import("./components/Profile/ProfileSettings").then((m) => ({
+    default: m.ProfileSettings,
+  })),
+);
 
 export default function App() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,16 +86,20 @@ export default function App() {
           {isOpen && <AuthModal onClose={() => setIsOpen(false)} />}
         </header>
         <main className="main">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/genres" element={<GenresPage />}></Route>
-            <Route path="/movie/:id" element={<FilmPage />} />
-            <Route path="/genres/:genre" element={<GenreMoviesPage />} />
-            <Route path="/profile" element={<ProfilePage />}>
-              <Route path="favorites" element={<ProfileFavorites />} />
-              <Route path="settings" element={<ProfileSettings />} />
-            </Route>
-          </Routes>
+          <Suspense fallback={<Loader />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/genres" element={<GenresPage />} />
+              <Route path="/movie/:id" element={<FilmPage />} />
+              <Route path="/genres/:genre" element={<GenreMoviesPage />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/profile" element={<ProfilePage />}>
+                  <Route path="favorites" element={<ProfileFavorites />} />
+                  <Route path="settings" element={<ProfileSettings />} />
+                </Route>
+              </Route>
+            </Routes>
+          </Suspense>
         </main>
 
         <footer className="footer">

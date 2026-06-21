@@ -3,6 +3,7 @@ import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import type { RootState } from "../store";
 import type { RequestStatus } from "../../entities/auth/types";
+import { getErrorMessage } from "../../utils/utils";
 
 interface HomeState {
   randomMovie: Movie | null;
@@ -10,7 +11,7 @@ interface HomeState {
   randomMovieStatus: RequestStatus;
   topMoviesStatus: RequestStatus;
   randomMovieError: string | null;
-  topMoviesError: string | null;  
+  topMoviesError: string | null;
 }
 
 export const initialState: HomeState = {
@@ -20,14 +21,6 @@ export const initialState: HomeState = {
   topMoviesStatus: "idle",
   randomMovieError: null,
   topMoviesError: null,
-};
-
-const getErrorMessage = (error: unknown, fallback: string) => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return fallback;
 };
 
 export const fetchRandomMovie = createAsyncThunk<

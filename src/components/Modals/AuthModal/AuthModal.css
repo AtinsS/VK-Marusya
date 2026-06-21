@@ -110,6 +110,7 @@
      background: #fff;
      outline: none;
      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+     fill: black;
  }
 
  .modal-auth__input::placeholder {
@@ -128,14 +129,32 @@
      background-position: 16px center;
  }
 
+ .modal-auth__input--emailRed {
+     background-image: url(../../../assets/emailRed.svg);
+     background-repeat: no-repeat;
+     background-position: 16px center;
+ }
+
  .modal-auth__input--password {
      background-image: url(../../../assets/pass.svg);
      background-repeat: no-repeat;
      background-position: 16px center;
  }
 
+ .modal-auth__input--passwordRed {
+     background-image: url(../../../assets/passRed.svg);
+     background-repeat: no-repeat;
+     background-position: 16px center;
+ }
+
  .modal-auth__input--name {
      background-image: url(../../../assets/mister.svg);
+     background-repeat: no-repeat;
+     background-position: 16px center;
+ }
+
+ .modal-auth__input--nameRed {
+     background-image: url(../../../assets/misterRed.svg);
      background-repeat: no-repeat;
      background-position: 16px center;
  }
@@ -204,4 +223,8 @@
      text-align: center;
      margin: 0;
      padding: 0;
+ }
+
+ .modal-auth__input--error {
+     border-color: red;
  }

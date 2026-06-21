@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { LoaderMovie } from "../../components/Loaders/LoaderMovie";
+import { Loader } from "../../components/Loaders/Loader";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
   fetchMoviesGrouped,
@@ -21,7 +21,6 @@ export const GenreMoviesPage = () => {
   const { genre } = useParams<{ genre: string }>();
 
   useEffect(() => {
-    // Загружаем сгруппированные фильмы
     dispatch(fetchMoviesGrouped());
   }, [dispatch]);
 
@@ -29,7 +28,7 @@ export const GenreMoviesPage = () => {
     setVisibleCount((prev) => prev + 10);
   };
 
-  if (status === "loading") return <LoaderMovie />;
+  if (status === "loading") return <Loader variant="movie" />;
   if (status === "failed")
     return <div className="error">Ошибка загрузки фильмов</div>;
   if (!genre) return <div className="error">Жанр не указан</div>;

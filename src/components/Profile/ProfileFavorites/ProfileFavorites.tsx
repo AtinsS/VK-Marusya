@@ -7,7 +7,7 @@ import {
   selectFavoritesError,
   selectFavoritesStatus,
 } from "../../../store/slices/favorite/getFavoritesSlice";
-import { LoaderMovie } from "../../Loaders/LoaderMovie";
+import { Loader } from "../../Loaders/Loader";
 import { useEffect } from "react";
 import "./ProfileFavorites.css";
 import { fetchDelFavorite } from "../../../store/slices/favorite/postDelFavoriteSlice";
@@ -34,7 +34,7 @@ export const ProfileFavorites = () => {
 
   return (
     <>
-      {status === "loading" ? <LoaderMovie /> : null}
+      {status === "loading" ? <Loader variant="movie" /> : null}
       {error ? <p className="favorite__status">{error}</p> : null}
       {favorites.length === 0 ? (
         <p className="favorite__status">У вас нет избранных фильмов</p>

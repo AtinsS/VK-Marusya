@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { MoviesApi } from "../../../api/movies.api";
 import type { RootState } from "../../store";
 import type { RequestStatus } from "../../../entities/auth/types";
+import { getErrorMessage } from "../../../utils/utils";
 
 export interface GenreState {
   genres: string[];
@@ -13,14 +14,6 @@ export const initialState: GenreState = {
   genres: [],
   status: "idle",
   error: null,
-};
-
-const getErrorMessage = (error: unknown, fallback: string) => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return fallback;
 };
 
 export const fetchGenres = createAsyncThunk<

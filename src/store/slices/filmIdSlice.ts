@@ -3,6 +3,7 @@ import { MoviesApi } from "../../api/movies.api";
 import type { Movie } from "../../entities/movies/types";
 import type { RootState } from "../store";
 import type { RequestStatus } from "../../entities/auth/types";
+import { getErrorMessage } from "../../utils/utils";
 
 interface FilmIdState {
   movie: Movie | null;
@@ -16,14 +17,6 @@ export const initialState: FilmIdState = {
   movieId: null,
   status: "idle",
   error: null,
-};
-
-const getErrorMessage = (error: unknown, fallback: string) => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-
-  return fallback;
 };
 
 export const fetchMovieById = createAsyncThunk<

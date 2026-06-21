@@ -6,7 +6,9 @@ import { Link } from "react-router-dom";
 export const ProfileSettings = () => {
   const { logout, user } = useAuth();
 
-  const userAvatar = user.name[0] + user.surname[0];
+  if (!user) return null;
+
+  const userAvatar = (user.name?.[0] ?? "") + (user.surname?.[0] ?? "");
 
   return (
     <>

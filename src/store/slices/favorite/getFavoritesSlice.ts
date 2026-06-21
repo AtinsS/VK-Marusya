@@ -5,10 +5,11 @@ import type { RequestStatus } from "../../../entities/auth/types";
 import type { Favorite } from "../../../entities/favorites/types";
 import type { Movie } from "../../../entities/movies/types";
 import type { RootState } from "../../store";
+import { getErrorMessage } from "../../../utils/utils";
 
 interface FavoritesState {
-  favorites: Favorite[]; // Храним ID избранных фильмов
-  movies: Record<number, Movie>; // Кэш полной информации о фильмах
+  favorites: Favorite[];
+  movies: Record<number, Movie>;
   status: RequestStatus;
   error: string | null;
 }
@@ -20,35 +21,24 @@ const initialState: FavoritesState = {
   error: null,
 };
 
-const getErrorMessage = (error: unknown, fallback: string): string => {
-  if (error instanceof Error) {
-    return error.message;
-  }
-  return fallback;
-};
-
 export const fetchFavorites = createAsyncThunk<
   { favorites: Favorite[]; movies: Record<number, Movie> },
   void,
   { rejectValue: string }
 >("favorites/fetchFavorites", async (_, { rejectWithValue }) => {
   try {
-    // Получаем список ID избранных фильмов
     const response = await FavoriteApi.getFavorites();
     const data = response.data;
 
-    // Ответ может быть либо массивом ID, либо объектом { favorites: [...] }
     let rawList: Array<number | string | Record<string, unknown>> = [];
     if (Array.isArray(data)) {
       rawList = data;
     } else if (data && Array.isArray(data.favorites)) {
       rawList = (data).favorites;
     } else {
-      console.warn("Unexpected /favorites response shape:", data);
       rawList = [];
     }
 
-    // Нормализуем id: элемент может быть number, string или объект { id }
     const normalizedIds: number[] = rawList
       .map((entry) => {
         if (entry && typeof entry === "object") {
@@ -60,7 +50,6 @@ export const fetchFavorites = createAsyncThunk<
 
     const favorites: Favorite[] = normalizedIds.map((id) => ({ id }));
 
-    // Получаем полную информацию о каждом фильме
     const movies: Record<number, Movie> = {};
 
     await Promise.all(
@@ -68,8 +57,8 @@ export const fetchFavorites = createAsyncThunk<
         try {
           const movie = await MoviesApi.getById(numericId);
           movies[numericId] = movie;
-        } catch (error) {
-          console.warn(`Не удалось загрузить фильм с ID ${numericId}:`, error);
+        } catch {
+          // skip failed movie
         }
       }),
     );
