@@ -172,6 +172,7 @@ footer {
 
     .footer {
         justify-content: left;
+        margin-top: 100%;
     }
 
     .header__btn {
