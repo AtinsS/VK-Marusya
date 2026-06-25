@@ -176,7 +176,7 @@
 @media (max-width: 767px) {
     .random-banner {
         flex-direction: column;
-        padding: 16px;
+        padding: 4x;
         gap: 20px;
     }
 
