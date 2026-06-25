@@ -176,7 +176,7 @@
 @media (max-width: 767px) {
     .film-banner {
         flex-direction: column;
-        padding: 16px;
+        padding: 4px;
         gap: 20px;
     }
 
