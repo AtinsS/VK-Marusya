@@ -62,6 +62,11 @@
 }
 
 @media (max-width: 767px) {
+
+    .profile-page {
+       margin-bottom: 20%;
+    }
+
     .profile-page__title {
         font-size: 24px;
     }
