@@ -1,4 +1,4 @@
-export const LANGUAGES = {
+export const LANGUAGES: Record<string, string> = {
   // Основные европейские
   en: "Английский",
   ru: "Русский",

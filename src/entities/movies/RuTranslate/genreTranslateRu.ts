@@ -1,4 +1,4 @@
-export const GENRES = {
+export const GENRES : Record<string, string> = {
   // Основные жанры
   drama: "Драма",
   comedy: "Комедия",
