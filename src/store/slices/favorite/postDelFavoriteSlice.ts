@@ -9,7 +9,7 @@ interface ToggleFavoriteState {
   error: string | null;
 }
 
-const initialState: ToggleFavoriteState = {
+export const initialState: ToggleFavoriteState = {
   status: "idle",
   error: null,
 };

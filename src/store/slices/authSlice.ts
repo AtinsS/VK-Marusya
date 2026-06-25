@@ -13,7 +13,7 @@ interface AuthState {
   status: RequestStatus;
   error: string | null;
 }
-const initialState: AuthState = {
+export const initialState: AuthState = {
   user: null,
   isAuth: false,
   status: "idle",

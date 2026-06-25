@@ -14,7 +14,7 @@ interface FavoritesState {
   error: string | null;
 }
 
-const initialState: FavoritesState = {
+export const initialState: FavoritesState = {
   favorites: [],
   movies: {},
   status: "idle",
