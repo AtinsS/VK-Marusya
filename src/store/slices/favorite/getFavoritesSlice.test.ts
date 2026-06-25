@@ -1,8 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { AxiosResponse } from 'axios';
+import type { Favorite } from '../../../entities/favorites/types';
+import type { Movie } from '../../../entities/movies/types';
 import favoritesReducer, {
   fetchFavorites,
-  selectFavorites,
-  selectFavoriteMovies,
   initialState,
 } from './getFavoritesSlice';
 
@@ -17,7 +18,7 @@ vi.mock('../../../api/movies.api', () => ({
 import { FavoriteApi } from '../../../api/favorites.api';
 import { MoviesApi } from '../../../api/movies.api';
 
-const mockMovie = {
+const mockMovie: Movie = {
   id: 1,
   title: 'Test',
   originalTitle: 'Test',
@@ -46,6 +47,10 @@ const mockMovie = {
   awardsSummary: '',
 };
 
+function mockAxiosResponse<T>(data: T): AxiosResponse<T> {
+  return { data, status: 200, statusText: 'OK', headers: {}, config: {} };
+}
+
 describe('getFavoritesSlice', () => {
   beforeEach(() => vi.clearAllMocks());
 
@@ -55,7 +60,7 @@ describe('getFavoritesSlice', () => {
 
   describe('fetchFavorites', () => {
     it('normalizes array response', async () => {
-      vi.mocked(FavoriteApi.getFavorites).mockResolvedValue({ data: [1, 2] });
+      vi.mocked(FavoriteApi.getFavorites).mockResolvedValue(mockAxiosResponse([1, 2]));
       vi.mocked(MoviesApi.getById).mockResolvedValue(mockMovie);
 
       const dispatch = vi.fn();
@@ -70,7 +75,9 @@ describe('getFavoritesSlice', () => {
     });
 
     it('normalizes object with favorites field', async () => {
-      vi.mocked(FavoriteApi.getFavorites).mockResolvedValue({ data: { favorites: [1, 2] } });
+      vi.mocked(FavoriteApi.getFavorites).mockResolvedValue(
+        mockAxiosResponse({ favorites: [1, 2] }),
+      );
       vi.mocked(MoviesApi.getById).mockResolvedValue(mockMovie);
 
       const dispatch = vi.fn();
@@ -99,7 +106,7 @@ describe('getFavoritesSlice', () => {
 
   it('handles fulfilled reducer', () => {
     const payload = {
-      favorites: [{ id: 1 }, { id: 2 }],
+      favorites: [{ id: 1 }, { id: 2 }] as Favorite[],
       movies: { 1: mockMovie },
     };
     const state = favoritesReducer(

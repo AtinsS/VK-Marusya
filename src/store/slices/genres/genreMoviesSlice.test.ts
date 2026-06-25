@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { Movie } from '../../../entities/movies/types';
 import genreMoviesReducer, {
   fetchMoviesGrouped,
-  selectGenreMovies,
   initialState,
 } from './genreMoviesSlice';
 
@@ -46,7 +46,7 @@ describe('genreMoviesSlice', () => {
   });
 
   it('handles fulfilled reducer', () => {
-    const payload = { Action: [], Comedy: [] };
+    const payload: Record<string, Movie[]> = { Action: [], Comedy: [] };
     const state = genreMoviesReducer(
       initialState,
       fetchMoviesGrouped.fulfilled(payload, ''),

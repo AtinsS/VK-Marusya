@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import genreReducer, {
   fetchGenres,
-  selectGenres,
   initialState,
 } from './genreSlice';
 
@@ -27,10 +26,14 @@ describe('genreSlice', () => {
       await fetchGenres()(dispatch, getState, undefined);
 
       const fulfilledCall = dispatch.mock.calls.find(
-        (call: [{ type: string }]) => call[0]?.type === fetchGenres.fulfilled.type,
+        (call: unknown[]) => {
+          const action = call[0] as { type?: string };
+          return action?.type === fetchGenres.fulfilled.type;
+        },
       );
       expect(fulfilledCall).toBeDefined();
-      expect(fulfilledCall[0].payload).toEqual(['Action', 'Action', 'Comedy']);
+      const action = fulfilledCall![0] as { payload: string[] };
+      expect(action.payload).toEqual(['Action', 'Action', 'Comedy']);
     });
 
     it('sets error on failure', async () => {
